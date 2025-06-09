@@ -19,7 +19,6 @@ public class Person {
 
     private boolean visible; // true = visible (shown in GUI), false = not visible (hidden in GUI)
 
-    
     /**
      * This is the constructor for the Person class.
      * @param male
@@ -48,7 +47,7 @@ public class Person {
         visible = true;
     }
 
-
+    
     // -=-  Getter/Accessor Methods  -=-
     /**
      * This method returns whether or not the person is a male.
