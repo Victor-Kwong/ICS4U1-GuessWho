@@ -17,6 +17,9 @@ public class Person {
     private String hairType; // "short", "tied", "long", or "bald".
     private boolean earPiercing; // true = ear piercing, false =  no ear piercing
 
+    private boolean visible; // true = visible (shown in GUI), false = not visible (hidden in GUI)
+
+    
     /**
      * This is the constructor for the Person class.
      * @param male
@@ -41,12 +44,15 @@ public class Person {
         this.hat = hat;
         this.hairType = hairType;
         this.earPiercing = earPiercing;
+
+        visible = true;
     }
+
 
     // -=-  Getter/Accessor Methods  -=-
     /**
      * This method returns whether or not the person is a male.
-     * @return boolean "male"
+     * @return boolean "male".
      */
     public boolean isMale() {
         return male;
@@ -54,7 +60,7 @@ public class Person {
 
     /**
      * This method returns the eye colour of the person.
-     * @return String "eyeColour"
+     * @return String "eyeColour".
      */
     public String getEyeColour() {
         return eyeColour;
@@ -62,7 +68,7 @@ public class Person {
 
     /**
      * This method returns whether or not the person has light skin.
-     * @return boolean "lightSkin"
+     * @return boolean "lightSkin".
      */
     public boolean isLightSkin() {
         return lightSkin;
@@ -70,7 +76,7 @@ public class Person {
 
     /**
      * This method returns the hair colour of the person.
-     * @return String "hairColour"
+     * @return String "hairColour".
      */
     public String hairColour() {
         return hairColour;
@@ -78,7 +84,7 @@ public class Person {
 
     /**
      * This method returns whether or not the person has facial hair.
-     * @return boolean "facialHair"
+     * @return boolean "facialHair".
      */
     public boolean hasFacialHair() {
         return facialHair;
@@ -86,7 +92,7 @@ public class Person {
 
     /**
      * This method returns whether or not the person has glasses.
-     * @return boolean "glasses"
+     * @return boolean "glasses".
      */
     public boolean hasGlasses() {
         return glasses;
@@ -94,7 +100,7 @@ public class Person {
 
     /**
      * This method returns whether or not the person has visible teeth.
-     * @return boolean "visibleTeeth"
+     * @return boolean "visibleTeeth".
      */
     public boolean hasVisibleTeeth() {
         return visibleTeeth;
@@ -102,7 +108,7 @@ public class Person {
 
     /**
      * This method returns whether or not the person has a hat.
-     * @return boolean "hat"
+     * @return boolean "hat".
      */
     public boolean hasHat() {
         return hat;
@@ -110,7 +116,7 @@ public class Person {
 
     /**
      * This method returns the hair type of the person.
-     * @return String "hairType"
+     * @return String "hairType".
      */
     public String getHairType() {
         return hairType;
@@ -118,9 +124,27 @@ public class Person {
 
     /**
      * This method returns whether or not the person has ear piercings.
-     * @return boolean "earPiercing"
+     * @return boolean "earPiercing".
      */
     public boolean hasEarPiercings() {
         return earPiercing;
+    }
+
+    /**
+     * This method returns whether or not the character is visible (true = visible, false = not visible).
+     * @return boolean "visible".
+     */
+    public boolean getVisibility() {
+        return visible;
+    }
+
+
+    // -=-  Setter/Modifier Methods  -=-
+    /**
+     * This method sets the visibility of the person (true = visible, false = not visible).
+     * @param visibility A boolean for whether or not the person is visible.
+     */
+    public void setVisibility(boolean visibility) {
+        visible = visibility;
     }
 }
