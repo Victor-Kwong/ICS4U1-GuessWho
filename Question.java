@@ -21,5 +21,7 @@ public class Question {
         "Does the person have ear piercings?"  // Index 18
     };
 
-    public void validateAnswer
+    public void validateAnswer() {
+        
+    }
 }
