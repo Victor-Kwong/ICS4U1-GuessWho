@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class GameController {
     // -=-  Character Set Up  -=-
     // (isMale, eyeColour, hasLightSkin, hairColour, hasFacialHair, hasGlasses, hasVisibleTeeth, hasHat, hairType, hasEarPiercings)
@@ -35,9 +37,13 @@ public class GameController {
     };
 
     static Person[][] player1Board; // Player 1 will ALWAYS be an actual user, and NEVER an AI!
-    static Person[][] player2Board;
+    static Person[][] player2Board; // Player 2 will be either an AI or a user (if we add player vs player).
 
     private static String difficulty = "normal"; // Normal or Hard.
+
+    private static int turnTracker; // 1 = Player 1's turn, 2 = Player 2's turn.
+    private static ArrayList<Integer> questionAsked; // For simplicity, the questions are mapped to specific integer values -> refer to the "Question.java" file for more info.
+    private static ArrayList<Boolean> questionResponse; // true = yes, false = no
 
 
     // -=-  Getter Methods  -=-
@@ -57,10 +63,30 @@ public class GameController {
         return difficulty;
     }
 
+    /**
+     * This method returns whose turn it is (1 for player 1, and 2 for ai or [maybe] second user).
+     * @return String turn
+     */
+    public static int getTurn() {
+        return turnTracker;
+    }
+
 
     // -=- Setter Methods  -=-
+    /**
+     * This method sets the difficulty of the new game.
+     * @param difficulty
+     */
     public static void setDifficulty(String difficulty) {
         GameController.difficulty = difficulty;
+    }
+
+    /**
+     * This method returns whose turn it is.
+     * @param turn
+     */
+    public static void setTurn(int turn) {
+        GameController.turnTracker = turn;
     }
 
     // -=-  Auxillery Methods  -=-
@@ -77,5 +103,11 @@ public class GameController {
                 player2Board[row][col] = defaultBoard[row][col];
             }
         }
+    }
+
+    public static void chooseRandomFirstTurn() {
+        int randNum = (int) Math.round(Math.random());
+
+        turnTracker = randNum + 1;
     }
 }

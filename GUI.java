@@ -3,8 +3,10 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -40,9 +42,6 @@ class GUI extends JFrame implements ActionListener {
     static private JButton playButton;
     static private JButton mainMenuButton;
     static private JButton humanVsComputerButton;
-    static private JButton gameModesButton;
-    static private JButton normalDifficultyButton;
-    static private JButton hardDifficultyButton;
 
 
     // -=-  GuiFrame Constructor  -=-
@@ -75,10 +74,10 @@ class GUI extends JFrame implements ActionListener {
         // Padding below title
         mainPanel.add(Box.createVerticalStrut(15));
 
-        // Buttons panel (horizontal zxis)
+        // Buttons panel (horizontal axis)
         buttonsPanel.setLayout(new FlowLayout());
         buttonsPanel.setBackground(backgroundColour);
-        buttonsPanel.setMaximumSize(new Dimension(1000, 60));
+        buttonsPanel.setMaximumSize(new Dimension(1200, 60));
         mainPanel.add(buttonsPanel);
 
         // "Play" Button
@@ -107,7 +106,7 @@ class GUI extends JFrame implements ActionListener {
 
         switch (command) {
             case "Play": // Code that executues when the "Play" button is pressed.
-                removeButton(playButton);
+                buttonsPanel.removeAll();
 
                 mainMenuButton = createButton(buttonsPanel, "Main Menu");
                 humanVsComputerButton = createButton(buttonsPanel, "Human VS Computer");
@@ -116,8 +115,7 @@ class GUI extends JFrame implements ActionListener {
 
                 break;
             case "Main Menu": // Code that executes when the "Main Menu" button is pressed.
-                removeButton(mainMenuButton);
-                removeButton(humanVsComputerButton);
+                buttonsPanel.removeAll();
 
                 addButton(playButton);
                 
@@ -125,20 +123,17 @@ class GUI extends JFrame implements ActionListener {
 
                 break;
             case "Human VS Computer": // Code that executes when the "Human VS Computer" button is pressed.
-                removeButton(mainMenuButton);
-                removeButton(humanVsComputerButton);
+                buttonsPanel.removeAll();
 
-                gameModesButton = createButton(buttonsPanel, "Game Modes");
-                normalDifficultyButton = createButton(buttonsPanel, "Normal Difficulty");
-                hardDifficultyButton = createButton(buttonsPanel, "Hard Difficulty");
+                createButton(buttonsPanel, "Game Modes");
+                createButton(buttonsPanel, "Normal Difficulty");
+                createButton(buttonsPanel, "Hard Difficulty");
 
                 updatePanel(buttonsPanel);
 
                 break;
             case "Game Modes": // Code that executes when the "Game Modes" button is pressed.
-                removeButton(gameModesButton);
-                removeButton(normalDifficultyButton);
-                removeButton(hardDifficultyButton);
+                buttonsPanel.removeAll();
 
                 addButton(mainMenuButton);
                 addButton(humanVsComputerButton);
@@ -149,29 +144,33 @@ class GUI extends JFrame implements ActionListener {
             case "Normal Difficulty":
                 GameController.setDifficulty("normal");
 
-                removeButton(gameModesButton);
-                removeButton(normalDifficultyButton);
-                removeButton(hardDifficultyButton);
+                buttonsPanel.removeAll();
 
                 updatePanel(buttonsPanel);
+
+                GameController.chooseRandomFirstTurn();
+                turnSetup();
+
                 boardSetup();
 
                 break;
             case "Hard Difficulty":
                 GameController.setDifficulty("hard");
 
-                removeButton(gameModesButton);
-                removeButton(normalDifficultyButton);
-                removeButton(hardDifficultyButton);
+                buttonsPanel.removeAll();
 
                 updatePanel(buttonsPanel);
+
+                GameController.chooseRandomFirstTurn();
+                turnSetup();
+
                 boardSetup();
 
                 break;
         }
     }
 
-    // This is a seperate actionlistener specifically for checking when the user clicks on one of the tiles (this catches all tiles/buttons in grid instead of creating individual command checkings for each).
+    // This is a seperate actionlistener specifically for checking when the user clicks on one of the tiles (this catches all tiles/button actions in grid instead of creating individual action checkings for each).
     ActionListener buttonActionListener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
             JButton clickedTile = (JButton) e.getSource();
@@ -208,14 +207,6 @@ class GUI extends JFrame implements ActionListener {
     }
 
     /**
-     * This method removes a specific button the the buttons panel/
-     * @param button A JButton
-     */
-    private void removeButton(JButton button) {
-        buttonsPanel.remove(button);
-    }
-
-    /**
      * This method adds a specific button the the buttons panel/
      * @param button A JButton
      */
@@ -231,7 +222,99 @@ class GUI extends JFrame implements ActionListener {
         panel.repaint();
     }
 
-        /**
+    /**
+     * This method sets up the turn tracker text on the first turn of a new game.
+     */
+    private void turnSetup() {
+        buttonsPanel.removeAll();
+
+        JLabel turnTrackerText = new JLabel("Turn: ");
+
+        turnTrackerText.setFont(new Font("Monospaced", Font.BOLD, 20));
+        turnTrackerText.setForeground(textColour);
+
+        if (GameController.getTurn() == 1) {
+            turnTrackerText.setText("Turn: User");
+            buttonsPanel.add(turnTrackerText);
+
+            buttonsPanel.add(Box.createHorizontalStrut(30)); // Padding between the turn tracker text and question asking drop down.
+
+            askDropDownSetup();
+
+            buttonsPanel.add(Box.createHorizontalStrut(30)); // Padding between the question asking drop down and character guessing drop down.
+
+            guessDropDownSetup();
+        } else {
+            turnTrackerText.setText("Turn: AI");
+            buttonsPanel.add(turnTrackerText);
+        }
+
+        updatePanel(buttonsPanel);
+    }
+
+    /**
+     * This methods sets up the question asking drop down.
+     */
+    private void askDropDownSetup() {
+        JLabel askText = new JLabel("Ask:");
+        askText.setFont(new Font("Monospaced", Font.BOLD, 20));
+        askText.setForeground(textColour);
+
+        JComboBox<String> askDropDown = new JComboBox<>(Question.questionBank);
+        
+        JButton submitAskButton = new JButton("Submit");
+
+        // Action listener for the question asking drop down.
+        submitAskButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String selectedOption = (String) askDropDown.getSelectedItem();
+                JOptionPane.showMessageDialog(buttonsPanel, "You Asked: " + selectedOption + "\nThe AI Says: ");
+
+                GameController.setTurn(2);
+                turnSetup();
+            }
+        });
+
+        buttonsPanel.add(askText);
+        buttonsPanel.add(askDropDown);
+        buttonsPanel.add(submitAskButton);
+    }
+
+    /**
+     * This methods sets up the character guessing drop down.
+     */
+    private void guessDropDownSetup() {
+        JLabel guessText = new JLabel("Guess:");
+        guessText.setFont(new Font("Monospaced", Font.BOLD, 20));
+        guessText.setForeground(textColour);
+
+        String[] characterBank = new String[]{
+            "Sam", "Olivia", "Nick", "David", "Sofia", "Liz",
+            "Lily", "Leo", "Emma", "Daniel", "Ben", "Katie",
+            "Al", "Amy", "Mike", "Gabe", "Farah", " Laura",
+            "Jordan", "Eric", "Carmen", "Rachel", "Joe", "Mia"
+        };
+        JComboBox<String> guessDropDown = new JComboBox<>(characterBank);
+        
+        JButton submitGuessButton = new JButton("Submit");
+
+        // Action listener for the character guessing drop down.
+        submitGuessButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String selectedOption = (String) guessDropDown.getSelectedItem();
+                JOptionPane.showMessageDialog(buttonsPanel, "You Guessed: " + selectedOption + "\nThe AI Says: ");
+
+                GameController.setTurn(2); // Change to end screen setup later
+                turnSetup(); // Change to end screen setup later
+            }
+        });
+
+        buttonsPanel.add(guessText);
+        buttonsPanel.add(guessDropDown);
+        buttonsPanel.add(submitGuessButton);
+    }
+
+    /**
      * This method will set up all the settings and visuals of the player's game board.
      * 
      * @return void

@@ -1,5 +1,5 @@
 public class Question {
-    private String[] questionBank = {
+    static String[] questionBank = {
         "Is the person a male?", // Index 0
         "Is the eye colour brown?", // Index 1
         "Is the eye colour green", // Index 2
