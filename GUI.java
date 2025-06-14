@@ -1,16 +1,20 @@
 // -=-  Imports  -=-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,6 +23,8 @@ class GUI extends JFrame implements ActionListener {
     static private final Color backgroundColour = new Color(25, 25, 30);
     static private final Color buttonColour = new Color(100, 100, 130);
     static private final Color textColour = new Color(230, 230, 250);
+    static private final Color shownTileColour = new Color(60, 60, 150);
+    static private final Color hiddenTileColour = new Color(150, 70, 60);
 
     // -=-  Other Constant Values  -=-
     static final int tileSize = 150;
@@ -165,6 +171,22 @@ class GUI extends JFrame implements ActionListener {
         }
     }
 
+    // This is a seperate actionlistener specifically for checking when the user clicks on one of the tiles (this catches all tiles/buttons in grid instead of creating individual command checkings for each).
+    ActionListener buttonActionListener = new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            JButton clickedTile = (JButton) e.getSource();
+            Person person = (Person) clickedTile.getClientProperty("person");
+
+            if (person.getVisibility()) {
+                person.setVisibility(false);
+                clickedTile.setBackground(hiddenTileColour);
+            } else {
+                person.setVisibility(true);
+                clickedTile.setBackground(shownTileColour);
+            }
+        }
+    };
+
 
     // -=-  AUXILIARY GUI METHODS  -=-
     /**
@@ -219,12 +241,39 @@ class GUI extends JFrame implements ActionListener {
 
         boardPanel.removeAll();
 
-        boardPanel.setLayout(new GridLayout(4, 6, 10, 10));
+        boardPanel.setLayout(new GridLayout(4, 6, 5, 5));
         boardPanel.setMaximumSize(new Dimension(6 * tileSize, 4 * tileSize));
 
-        //for (char[] row : ) {
-            
-        //}
+        for (Person[] row : GameController.player1Board) {
+            for (Person col : row) {
+                JButton tile = new JButton();
+
+                ImageIcon ogIcon = new ImageIcon(col.getImgPath());
+                Image scaledImage = ogIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+                ImageIcon scaledIcon = new ImageIcon(scaledImage);
+                tile.setIcon(scaledIcon);
+
+                tile.setFont(new Font("Monospaced", Font.BOLD, 20));
+                tile.setForeground(textColour);
+                tile.setText(col.getName());
+
+                if (col.getVisibility()) {
+                    tile.setBackground(shownTileColour);
+                } else {
+                    tile.setBackground(hiddenTileColour);
+                }
+
+                tile.setHorizontalAlignment(SwingConstants.CENTER);
+                tile.setVerticalAlignment(SwingConstants.CENTER);
+                tile.setHorizontalTextPosition(SwingConstants.CENTER);
+                tile.setVerticalTextPosition(SwingConstants.BOTTOM);
+
+                tile.putClientProperty("person", col);
+                tile.addActionListener(buttonActionListener);
+
+                boardPanel.add(tile);
+            }
+        }
         
         
         updatePanel(boardPanel);
