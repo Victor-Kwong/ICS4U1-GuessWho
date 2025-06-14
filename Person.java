@@ -15,9 +15,10 @@ public class Person {
     private boolean visibleTeeth; // true = visible teeth, false = no visible teeth.
     private boolean hat; // true = hat, false = no hat.
     private String hairType; // "short", "tied", "long", or "bald".
-    private boolean earPiercing; // true = ear piercing, false =  no ear piercing
+    private boolean earPiercing; // true = ear piercing, false =  no ear piercing.
 
-    private boolean visible; // true = visible (shown in GUI), false = not visible (hidden in GUI)
+    private String imgPath; // The path to each characters' image.
+    private boolean visible; // true = visible (shown in GUI), false = not visible (hidden in GUI).
 
     /**
      * This is the constructor for the Person class.
@@ -32,7 +33,7 @@ public class Person {
      * @param hairType
      * @param earPiercing
      */
-    public Person(boolean male, String eyeColour, boolean lightSkin, String hairColour, boolean facialHair, boolean glasses, boolean visibleTeeth, boolean hat, String hairType, boolean earPiercing) {
+    public Person(boolean male, String eyeColour, boolean lightSkin, String hairColour, boolean facialHair, boolean glasses, boolean visibleTeeth, boolean hat, String hairType, boolean earPiercing, String imgPath) {
         this.male = male;
         this.eyeColour = eyeColour;
         this.lightSkin = lightSkin;
@@ -44,6 +45,7 @@ public class Person {
         this.hairType = hairType;
         this.earPiercing = earPiercing;
 
+        this.imgPath = imgPath;
         visible = true;
     }
 

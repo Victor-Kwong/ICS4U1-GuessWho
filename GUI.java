@@ -1,3 +1,4 @@
+// -=-  Imports  -=-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -9,17 +10,23 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 class GUI extends JFrame implements ActionListener {
-    // -=- Constant Colour Values
+    // -=-  Constant Colour Values  -=-
     static private final Color backgroundColour = new Color(25, 25, 30);
     static private final Color buttonColour = new Color(100, 100, 130);
     static private final Color textColour = new Color(230, 230, 250);
 
+    // -=-  Other Constant Values  -=-
+    static final int tileSize = 150;
+
     // -=-  Component Initializations  -=-
     static private JPanel mainPanel = new JPanel();
+    static private JPanel boardPanel = new JPanel();
+
     static private JLabel title = new JLabel("Guess Who?");
     static private JLabel authors = new JLabel("By: Moxin Guo, Victor Kwong, & Victoria Wong");
     static private JPanel buttonsPanel = new JPanel();
@@ -29,14 +36,14 @@ class GUI extends JFrame implements ActionListener {
     static private JButton humanVsComputerButton;
     static private JButton gameModesButton;
     static private JButton normalDifficultyButton;
-    static private JButton nightmareDifficultyButton;
+    static private JButton hardDifficultyButton;
 
 
     // -=-  GuiFrame Constructor  -=-
-    public GUI() {
+    GUI() {
         // GUI frame settings
         setTitle("Guess Who? (By: Moxin Guo, Victor Kwong, & Victoria Wong)");
-        setSize(1280, 800);
+        setSize(1280, 900);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Main panel (vertical axis)
@@ -62,7 +69,7 @@ class GUI extends JFrame implements ActionListener {
         // Padding below title
         mainPanel.add(Box.createVerticalStrut(15));
 
-        // Buttons Panel (Horizontal Axis)
+        // Buttons panel (horizontal zxis)
         buttonsPanel.setLayout(new FlowLayout());
         buttonsPanel.setBackground(backgroundColour);
         buttonsPanel.setMaximumSize(new Dimension(1000, 60));
@@ -70,6 +77,13 @@ class GUI extends JFrame implements ActionListener {
 
         // "Play" Button
         playButton = createButton(buttonsPanel, "Play");
+
+        // Padding between buttons panel and board panel.
+        mainPanel.add(Box.createVerticalStrut(30));
+
+        // Adding the board visual panel to the main panel.
+        boardPanel.setBackground(backgroundColour);
+        mainPanel.add(boardPanel);
 
         // Setting the visibility of everything to true
         setVisible(true);
@@ -87,47 +101,65 @@ class GUI extends JFrame implements ActionListener {
 
         switch (command) {
             case "Play": // Code that executues when the "Play" button is pressed.
-                buttonsPanel.remove(playButton);
+                removeButton(playButton);
 
                 mainMenuButton = createButton(buttonsPanel, "Main Menu");
                 humanVsComputerButton = createButton(buttonsPanel, "Human VS Computer");
 
-                buttonsPanel.revalidate();
-                buttonsPanel.repaint();
+                updatePanel(buttonsPanel);
 
                 break;
             case "Main Menu": // Code that executes when the "Main Menu" button is pressed.
-                buttonsPanel.remove(mainMenuButton);
-                buttonsPanel.remove(humanVsComputerButton);
+                removeButton(mainMenuButton);
+                removeButton(humanVsComputerButton);
 
-                buttonsPanel.add(playButton);
+                addButton(playButton);
                 
-                buttonsPanel.revalidate();
-                buttonsPanel.repaint();
+                updatePanel(buttonsPanel);
 
                 break;
             case "Human VS Computer": // Code that executes when the "Human VS Computer" button is pressed.
-                buttonsPanel.remove(humanVsComputerButton);
-                buttonsPanel.remove(mainMenuButton);
+                removeButton(mainMenuButton);
+                removeButton(humanVsComputerButton);
 
                 gameModesButton = createButton(buttonsPanel, "Game Modes");
                 normalDifficultyButton = createButton(buttonsPanel, "Normal Difficulty");
-                nightmareDifficultyButton = createButton(buttonsPanel, "Nightmare Difficulty");
+                hardDifficultyButton = createButton(buttonsPanel, "Hard Difficulty");
 
-                buttonsPanel.revalidate();
-                buttonsPanel.repaint();
+                updatePanel(buttonsPanel);
 
                 break;
             case "Game Modes": // Code that executes when the "Game Modes" button is pressed.
-                buttonsPanel.remove(gameModesButton);
-                buttonsPanel.remove(normalDifficultyButton);
-                buttonsPanel.remove(nightmareDifficultyButton);
+                removeButton(gameModesButton);
+                removeButton(normalDifficultyButton);
+                removeButton(hardDifficultyButton);
 
-                buttonsPanel.add(mainMenuButton);
-                buttonsPanel.add(humanVsComputerButton);
+                addButton(mainMenuButton);
+                addButton(humanVsComputerButton);
 
-                buttonsPanel.revalidate();
-                buttonsPanel.repaint();
+                updatePanel(buttonsPanel);
+
+                break;
+            case "Normal Difficulty":
+                GameController.setDifficulty("normal");
+
+                removeButton(gameModesButton);
+                removeButton(normalDifficultyButton);
+                removeButton(hardDifficultyButton);
+
+                updatePanel(buttonsPanel);
+                boardSetup();
+
+                break;
+            case "Hard Difficulty":
+                GameController.setDifficulty("hard");
+
+                removeButton(gameModesButton);
+                removeButton(normalDifficultyButton);
+                removeButton(hardDifficultyButton);
+
+                updatePanel(buttonsPanel);
+                boardSetup();
 
                 break;
         }
@@ -137,11 +169,10 @@ class GUI extends JFrame implements ActionListener {
     // -=-  AUXILIARY GUI METHODS  -=-
     /**
      * This method creates a button for the buttons panel.
-     * 
      * @param panel, text A JPanel and a String that helps with knowing how to create the button.
      * @return void
      */
-    public JButton createButton(JPanel panel, String text) {
+    private JButton createButton(JPanel panel, String text) {
         JButton button = new JButton(text);
         
         button.setFont(new Font("Monospaced", Font.BOLD, 25));
@@ -152,5 +183,50 @@ class GUI extends JFrame implements ActionListener {
         panel.add(button);
 
         return button;
+    }
+
+    /**
+     * This method removes a specific button the the buttons panel/
+     * @param button A JButton
+     */
+    private void removeButton(JButton button) {
+        buttonsPanel.remove(button);
+    }
+
+    /**
+     * This method adds a specific button the the buttons panel/
+     * @param button A JButton
+     */
+    private void addButton(JButton button) {
+        buttonsPanel.add(button);
+    }
+
+    /**
+     * This method updates the given panel.
+     */
+    private void updatePanel(JPanel panel) {
+        panel.revalidate();
+        panel.repaint();
+    }
+
+        /**
+     * This method will set up all the settings and visuals of the player's game board.
+     * 
+     * @return void
+     */
+    private void boardSetup() {
+        GameController.resetPlayerBoardsToDefault();
+
+        boardPanel.removeAll();
+
+        boardPanel.setLayout(new GridLayout(4, 6, 10, 10));
+        boardPanel.setMaximumSize(new Dimension(6 * tileSize, 4 * tileSize));
+
+        //for (char[] row : ) {
+            
+        //}
+        
+        
+        updatePanel(boardPanel);
     }
 }
