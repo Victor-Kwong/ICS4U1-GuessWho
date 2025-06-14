@@ -6,6 +6,7 @@
 
 public class Person {
     // -=-  Attributes of a Person  -=-
+    private String name; // The name of the character.
     private boolean male; // true = male, false = female.
     private String eyeColour; // "brown", "green", or "blue".
     private boolean lightSkin; // true = light skin, false = dark skin.
@@ -15,12 +16,14 @@ public class Person {
     private boolean visibleTeeth; // true = visible teeth, false = no visible teeth.
     private boolean hat; // true = hat, false = no hat.
     private String hairType; // "short", "tied", "long", or "bald".
-    private boolean earPiercing; // true = ear piercing, false =  no ear piercing
+    private boolean earPiercing; // true = ear piercing, false =  no ear piercing.
 
-    private boolean visible; // true = visible (shown in GUI), false = not visible (hidden in GUI)
+    private String imgPath; // The path to each characters' image.
+    private boolean visible; // true = visible (shown in GUI), false = not visible (hidden in GUI).
 
     /**
-     * This is the constructor for the Person class.
+     * This is the constructor of the person class.
+     * @param name
      * @param male
      * @param eyeColour
      * @param lightSkin
@@ -31,8 +34,10 @@ public class Person {
      * @param hat
      * @param hairType
      * @param earPiercing
+     * @param imgPath
      */
-    public Person(boolean male, String eyeColour, boolean lightSkin, String hairColour, boolean facialHair, boolean glasses, boolean visibleTeeth, boolean hat, String hairType, boolean earPiercing) {
+    public Person(String name, boolean male, String eyeColour, boolean lightSkin, String hairColour, boolean facialHair, boolean glasses, boolean visibleTeeth, boolean hat, String hairType, boolean earPiercing, String imgPath) {
+        this.name = name;
         this.male = male;
         this.eyeColour = eyeColour;
         this.lightSkin = lightSkin;
@@ -44,11 +49,20 @@ public class Person {
         this.hairType = hairType;
         this.earPiercing = earPiercing;
 
+        this.imgPath = imgPath;
         visible = true;
     }
 
     
     // -=-  Getter/Accessor Methods  -=-
+    /**
+     * This method returns the name of the character.
+     * @return String name
+     */
+    public String getName() {
+        return name;
+    }
+
     /**
      * This method returns whether or not the person is a male.
      * @return boolean "male".
@@ -135,6 +149,14 @@ public class Person {
      */
     public boolean getVisibility() {
         return visible;
+    }
+
+    /**
+     * This method returns the image path of the character.
+     * @return String "imgPath"
+     */
+    public String getImgPath() {
+        return imgPath;
     }
 
 
