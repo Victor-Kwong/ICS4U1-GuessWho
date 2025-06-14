@@ -42,8 +42,6 @@ public class GameController {
     private static String difficulty = "normal"; // Normal or Hard.
 
     private static int turnTracker; // 1 = Player 1's turn, 2 = Player 2's turn.
-    private static ArrayList<Integer> questionAsked; // For simplicity, the questions are mapped to specific integer values -> refer to the "Question.java" file for more info.
-    private static ArrayList<Boolean> questionResponse; // true = yes, false = no
 
 
     // -=-  Getter Methods  -=-

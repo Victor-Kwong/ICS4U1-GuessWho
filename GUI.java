@@ -148,6 +148,7 @@ class GUI extends JFrame implements ActionListener {
 
                 updatePanel(buttonsPanel);
 
+                Question.resetToDefault();
                 GameController.chooseRandomFirstTurn();
                 turnSetup();
 
@@ -161,6 +162,7 @@ class GUI extends JFrame implements ActionListener {
 
                 updatePanel(buttonsPanel);
 
+                Question.resetToDefault();
                 GameController.chooseRandomFirstTurn();
                 turnSetup();
 
@@ -223,7 +225,7 @@ class GUI extends JFrame implements ActionListener {
     }
 
     /**
-     * This method sets up the turn tracker text on the first turn of a new game.
+     * This method sets up each turn.
      */
     private void turnSetup() {
         buttonsPanel.removeAll();
@@ -237,16 +239,20 @@ class GUI extends JFrame implements ActionListener {
             turnTrackerText.setText("Turn: User");
             buttonsPanel.add(turnTrackerText);
 
-            buttonsPanel.add(Box.createHorizontalStrut(30)); // Padding between the turn tracker text and question asking drop down.
+            buttonsPanel.add(Box.createHorizontalStrut(30)); // Padding between the turn tracker text and the question asking drop down.
 
             askDropDownSetup();
 
-            buttonsPanel.add(Box.createHorizontalStrut(30)); // Padding between the question asking drop down and character guessing drop down.
+            buttonsPanel.add(Box.createHorizontalStrut(30)); // Padding between the question asking drop down and the character guessing drop down.
 
             guessDropDownSetup();
         } else {
             turnTrackerText.setText("Turn: AI");
             buttonsPanel.add(turnTrackerText);
+
+            buttonsPanel.add(Box.createHorizontalStrut(30)); // Padding between the turn tracker text and the user response buttons.
+
+            userResponseButtonsSetup();
         }
 
         updatePanel(buttonsPanel);
@@ -260,9 +266,13 @@ class GUI extends JFrame implements ActionListener {
         askText.setFont(new Font("Monospaced", Font.BOLD, 20));
         askText.setForeground(textColour);
 
-        JComboBox<String> askDropDown = new JComboBox<>(Question.questionBank);
+        JComboBox<String> askDropDown = new JComboBox<>(Question.getQuestionBank());
         
         JButton submitAskButton = new JButton("Submit");
+        submitAskButton.setFont(new Font("Monospaced", Font.BOLD, 15));
+        submitAskButton.setForeground(textColour);
+        submitAskButton.setBackground(buttonColour);
+        submitAskButton.setFocusPainted(false);
 
         // Action listener for the question asking drop down.
         submitAskButton.addActionListener(new ActionListener() {
@@ -297,8 +307,12 @@ class GUI extends JFrame implements ActionListener {
         JComboBox<String> guessDropDown = new JComboBox<>(characterBank);
         
         JButton submitGuessButton = new JButton("Submit");
+        submitGuessButton.setFont(new Font("Monospaced", Font.BOLD, 15));
+        submitGuessButton.setForeground(textColour);
+        submitGuessButton.setBackground(buttonColour);
+        submitGuessButton.setFocusPainted(false);
 
-        // Action listener for the character guessing drop down.
+        // Action listener for the character guessing drop down (submit button).
         submitGuessButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String selectedOption = (String) guessDropDown.getSelectedItem();
@@ -312,6 +326,46 @@ class GUI extends JFrame implements ActionListener {
         buttonsPanel.add(guessText);
         buttonsPanel.add(guessDropDown);
         buttonsPanel.add(submitGuessButton);
+    }
+
+    /**
+     * This method sets up the user response UI.
+     */
+    private void userResponseButtonsSetup() {
+        String aiQuestion = Question.getQuestionBank()[Question.getNewAiAskedQuestionIndex()]; // Gets the actual question string from the question index.
+        JLabel aiQuestionText = new JLabel("\"" + aiQuestion + "\":");
+        aiQuestionText.setFont(new Font("Monospaced", Font.BOLD, 20));
+        aiQuestionText.setForeground(textColour);
+
+        JButton yesButton = new JButton("Yes");
+        yesButton.setFont(new Font("Monospaced", Font.BOLD, 15));
+        yesButton.setForeground(textColour);
+        yesButton.setBackground(buttonColour);
+        yesButton.setFocusPainted(false);
+
+        JButton noButton = new JButton("No");
+        noButton.setFont(new Font("Monospaced", Font.BOLD, 15));
+        noButton.setForeground(textColour);
+        noButton.setBackground(buttonColour);
+        noButton.setFocusPainted(false);
+
+        // Action listener for the yes button.
+        yesButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                
+            }
+        });
+
+        // Action listener for the no button.
+        noButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                
+            }
+        });
+
+        buttonsPanel.add(aiQuestionText);
+        buttonsPanel.add(yesButton);
+        buttonsPanel.add(noButton);
     }
 
     /**
