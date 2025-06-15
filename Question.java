@@ -73,27 +73,6 @@ public class Question {
         return aiAttributeTracker;
     }
 
-    /**
-     * This method returns the question index of the question the AI asked.
-     * @return
-     */
-    public static int getNewAiAskedQuestionIndex() {
-        int questionIndex;
-
-        if (GameController.getDifficulty().equals("normal")) {
-            questionIndex = (int) (Math.random() * 19);
-            while (aiAskedQuestions.contains(questionIndex)) {
-                questionIndex = (int) (Math.random() * 19);
-            }
-        } else {
-            questionIndex = 0; // PLACEHOLDER!!!
-        }
-
-        aiAskedQuestions.add(questionIndex);
-
-        return questionIndex;
-    }
-
     
     // -=-  Setter Methods  -=-
     /**
@@ -187,6 +166,27 @@ public class Question {
         } else {
             return "No";
         }
+    }
+
+    /**
+     * This method returns the question index of the question the AI asked.
+     * @return
+     */
+    public static int getNewAiAskedQuestionIndex() {
+        int questionIndex;
+
+        if (GameController.getDifficulty().equals("normal")) { // AI question choosing logic for normal mode.
+            questionIndex = (int) (Math.random() * 19);
+            while (aiAskedQuestions.contains(questionIndex)) { // AI question choosing logic for hard mode.
+                questionIndex = (int) (Math.random() * 19);
+            }
+        } else {
+            questionIndex = 0; // PLACEHOLDER!!!
+        }
+
+        aiAskedQuestions.add(questionIndex);
+
+        return questionIndex;
     }
 
     /**

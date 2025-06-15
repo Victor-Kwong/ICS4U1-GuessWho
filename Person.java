@@ -36,7 +36,7 @@ public class Person {
      * @param earPiercing
      * @param imgPath
      */
-    public Person(String name, boolean male, String eyeColour, boolean lightSkin, String hairColour, boolean facialHair, boolean glasses, boolean visibleTeeth, boolean hat, String hairType, boolean earPiercing, String imgPath) {
+    public Person(String name, boolean male, String eyeColour, boolean lightSkin, String hairColour, boolean facialHair, boolean glasses, boolean visibleTeeth, boolean hat, String hairType, boolean earPiercing) {
         this.name = name;
         this.male = male;
         this.eyeColour = eyeColour;
@@ -49,7 +49,7 @@ public class Person {
         this.hairType = hairType;
         this.earPiercing = earPiercing;
 
-        this.imgPath = imgPath;
+        imgPath = "Character Images\\" + name.toLowerCase() + ".png";
         visible = true;
     }
 
