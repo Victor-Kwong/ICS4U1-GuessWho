@@ -1,4 +1,4 @@
-public class UserAskvsAi {
+public class UserTurn {
 
     public static void handleUserQuestion(int questionIndex) {
         //Show the question that user chose
