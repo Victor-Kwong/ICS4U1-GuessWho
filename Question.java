@@ -188,4 +188,17 @@ public class Question {
             return "No";
         }
     }
+
+    /**
+     * This method returns whether or not the user's guess is correct (if wrong, the game will end right after).
+     * @param character
+     * @return
+     */
+    public static String validateUserGuess(String character) {
+        if (character.equals(GameController.getAiCharacter().getName())) {
+            return "Yes, you win!";
+        } else {
+            return "No, you lost!";
+        }
+    }
 }

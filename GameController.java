@@ -100,6 +100,7 @@ public class GameController {
      */
     public static void setAiCharacter() {
         aiCharacter = player2Board[(int) (Math.random() * 4)][(int) (Math.random() * 6)];
+        System.out.println(aiCharacter.getName());
     }
 
     // -=-  Auxillery Methods  -=-

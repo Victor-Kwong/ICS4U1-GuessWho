@@ -302,7 +302,7 @@ class GUI extends JFrame implements ActionListener {
         String[] characterBank = new String[]{
             "Sam", "Olivia", "Nick", "David", "Sofia", "Liz",
             "Lily", "Leo", "Emma", "Daniel", "Ben", "Katie",
-            "Al", "Amy", "Mike", "Gabe", "Farah", " Laura",
+            "Al", "Amy", "Mike", "Gabe", "Farah", "Laura",
             "Jordan", "Eric", "Carmen", "Rachel", "Joe", "Mia"
         };
         JComboBox<String> guessDropDown = new JComboBox<>(characterBank);
@@ -317,10 +317,20 @@ class GUI extends JFrame implements ActionListener {
         submitGuessButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String selectedOption = (String) guessDropDown.getSelectedItem();
-                JOptionPane.showMessageDialog(buttonsPanel, "You Guessed: " + selectedOption + "\nThe AI Says: ");
+                JOptionPane.showMessageDialog(buttonsPanel, "You Guessed: " + selectedOption + "\nThe AI Says: " + Question.validateUserGuess(guessDropDown.getSelectedItem().toString()));
 
-                GameController.setTurn(2); // Change to end screen setup later
-                turnSetup(); // Change to end screen setup later
+                if (Question.validateUserGuess(guessDropDown.getSelectedItem().toString()).equals("Yes, you win!")) {
+                    // File writing to history text file goes here!
+                } else {
+                    // File writing to history text file goes here!
+                }
+
+                boardPanel.removeAll();
+                buttonsPanel.removeAll();
+
+                updatePanel(mainPanel);
+
+                addButton(playButton);
             }
         });
 
