@@ -76,7 +76,7 @@ public class GameController {
     public static Person getAiCharacter() {
         return aiCharacter;
     }
-
+    //ADD get user char
 
     // -=- Setter Methods  -=-
     /**
