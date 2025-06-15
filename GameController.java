@@ -70,7 +70,7 @@ public class GameController {
     public static Person getAiCharacter() {
         return aiCharacter;
     }
-
+    //ADD get user char
 
     // -=- Setter Methods  -=-
     /**
@@ -195,7 +195,7 @@ public class GameController {
         Question.getAiAttributeTracker().put(17, 2);
         Question.getAiAttributeTracker().put(18, 7);
     }
-
+  
     public static void updateAiValidCharactersList(boolean response, int questionIndex) {
         if (response) { // If the user said yes.
 
