@@ -46,7 +46,7 @@ public class UserAskvsAi {
     }
 }
 
-//bc i added that flip think i think we need to add flip method to person class?
+//bc i added that flip think i think we need to add flip method to person class? wait actually idk is that the getvisibility thing idont think so right
 /**
     //flip visibility of card
     public void flip() {
