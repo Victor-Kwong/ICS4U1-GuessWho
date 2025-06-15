@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class Question {
@@ -22,12 +24,13 @@ public class Question {
         "Does the person have their hair tied up?", // Index 15
         "Does the person have long hair?", // Index 16
         "Is the person bald?", // Index 17
-        "Does the person have ear piercings?"  // Index 18
+        "Does the person have ear piercings?" // Index 18
     };
 
     private static ArrayList<Integer> questionsAsked; // For simplicity, the questions are mapped to specific integer values -> refer to the "Question.java" file for more info.
     private static ArrayList<Boolean> questionResponses; // true = yes, false = no
     private static Set<Integer> aiAskedQuestions = new HashSet<>();
+    private static Map<Integer, Integer> aiAttributeTracker = new HashMap<>(); // Question Index:# of Characters With Attribute
 
     // -=-  Getter Methods  -=-
     /**
@@ -60,6 +63,14 @@ public class Question {
      */
     public static Set<Integer> getAiAskedQuestions() {
         return aiAskedQuestions;
+    }
+
+    /**
+     * This method returns a hashmap of the AI's attrivute tracker.
+     * @return Set<Integer> aiAskedQuestions.
+     */
+    public static Map<Integer, Integer> getAiAttributeTracker() {
+        return aiAttributeTracker;
     }
 
     /**
@@ -101,14 +112,80 @@ public class Question {
         questionResponses.add(response);
     }
 
+
+    // -=-  Auxillery Methods  -=-
     /**
-     * This method resets all values to their default values for a new game instance.
+     * This method returns true or false based on the question the user asks about the AI's character.
+     * @param questionIndex
+     * @return boolean
      */
-    public static void resetToDefault() {
-        if ((questionsAsked != null) && (questionResponses != null) && (aiAskedQuestions != null)) {
-            questionsAsked.clear();
-            questionResponses.clear();
-            aiAskedQuestions.clear();
+    public static String validateUserQuestion(int questionIndex) {
+        boolean response = false;
+
+        switch (questionIndex) {
+            case 0:
+                response = GameController.getAiCharacter().isMale() == true;
+                break;
+            case 1:
+                response = GameController.getAiCharacter().getEyeColour().equals("brown");
+                break;
+            case 2:
+                response = GameController.getAiCharacter().getEyeColour().equals("green");
+                break;
+            case 3:
+                response = GameController.getAiCharacter().getEyeColour().equals("blue");
+                break;
+            case 4:
+                response = GameController.getAiCharacter().isLightSkin() == true;
+                break;
+            case 5:
+                response = GameController.getAiCharacter().getHairColour().equals("black");
+                break;
+            case 6:
+                response = GameController.getAiCharacter().getHairColour().equals("brown");
+                break;
+            case 7:
+                response = GameController.getAiCharacter().getHairColour().equals("ginger");
+                break;
+            case 8:
+                response = GameController.getAiCharacter().getHairColour().equals("blonde");
+                break;
+            case 9:
+                response = GameController.getAiCharacter().getHairColour().equals("white");
+                break;
+            case 10:
+                response = GameController.getAiCharacter().hasFacialHair() == true;
+                break;
+            case 11:
+                response = GameController.getAiCharacter().hasGlasses() == true;
+                break;
+            case 12:
+                response = GameController.getAiCharacter().hasVisibleTeeth() == true;
+                break;
+            case 13:
+                response = GameController.getAiCharacter().hasHat() == true;
+                break;
+            case 14:
+                response = GameController.getAiCharacter().getHairType().equals("short");
+                break;
+            case 15:
+                response = GameController.getAiCharacter().getHairType().equals("tied");
+                break;
+            case 16:
+                response = GameController.getAiCharacter().getHairType().equals("long");
+                break;
+            case 17:
+                response = GameController.getAiCharacter().getHairType().equals("bald");
+                break;
+            case 18:
+                response = GameController.getAiCharacter().hasEarPiercings() == true;
+                break;
+        }
+
+        if (response) {
+            return "Yes";
+        } else {
+            return "No";
         }
     }
 }

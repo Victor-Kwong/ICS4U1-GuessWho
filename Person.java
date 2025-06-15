@@ -91,7 +91,7 @@ public class Person {
      * This method returns the hair colour of the person.
      * @return String "hairColour".
      */
-    public String hairColour() {
+    public String getHairColour() {
         return hairColour;
     }
 

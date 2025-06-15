@@ -148,7 +148,7 @@ class GUI extends JFrame implements ActionListener {
 
                 updatePanel(buttonsPanel);
 
-                Question.resetToDefault();
+                GameController.newGame();
                 GameController.chooseRandomFirstTurn();
                 turnSetup();
 
@@ -162,7 +162,7 @@ class GUI extends JFrame implements ActionListener {
 
                 updatePanel(buttonsPanel);
 
-                Question.resetToDefault();
+                GameController.newGame();
                 GameController.chooseRandomFirstTurn();
                 turnSetup();
 
@@ -278,7 +278,8 @@ class GUI extends JFrame implements ActionListener {
         submitAskButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String selectedOption = (String) askDropDown.getSelectedItem();
-                JOptionPane.showMessageDialog(buttonsPanel, "You Asked: " + selectedOption + "\nThe AI Says: ");
+                
+                JOptionPane.showMessageDialog(buttonsPanel, "You Asked: " + selectedOption + "\nThe AI Says: " + Question.validateUserQuestion((int) askDropDown.getSelectedIndex()));
 
                 GameController.setTurn(2);
                 turnSetup();
@@ -374,8 +375,6 @@ class GUI extends JFrame implements ActionListener {
      * @return void
      */
     private void boardSetup() {
-        GameController.resetPlayerBoardsToDefault();
-
         boardPanel.removeAll();
 
         boardPanel.setLayout(new GridLayout(4, 6, 5, 5));
