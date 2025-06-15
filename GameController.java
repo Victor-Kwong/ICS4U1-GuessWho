@@ -1,7 +1,14 @@
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
+
 public class GameController {
     // -=-  Character Set Up  -=-
     // (isMale, eyeColour, hasLightSkin, hairColour, hasFacialHair, hasGlasses, hasVisibleTeeth, hasHat, hairType, hasEarPiercings)
-    static Person sam = new Person("Sam", true, "green", false, "black", false, false, false, true, "short", false, "Character Images\\sam.png");
+    /*static Person sam = new Person("Sam", true, "green", false, "black", false, false, false, true, "short", false, "Character Images\\sam.png");
     static Person olivia = new Person("Olivia", false, "brown", false, "black", false, false, false, false, "tied", false, "Character Images\\olivia.png");
     static Person nick = new Person("Nick", true, "brown", true, "blonde", false, false, false, false, "short", true, "Character Images\\nick.png");
     static Person david = new Person("David", true, "brown", true, "blonde", true, false, true, true, "short", false, "Character Images\\david.png");
@@ -24,35 +31,22 @@ public class GameController {
     static Person carmen = new Person("Carmen", false, "brown", false, "white", false, false, true, false, "short", true, "Character Images\\carmen.png");
     static Person rachel = new Person("Rachel", false, "blue", true, "brown", false, true, false, false, "long", true, "Character Images\\rachel.png");
     static Person joe = new Person("Joe", true, "brown", false, "white", true, true, true, false, "bald", false, "Character Images\\joe.png");
-    static Person mia = new Person("Mia", false, "brown", false, "black", false, false, true, false, "long", false, "Character Images\\mia.png");
+    static Person mia = new Person("Mia", false, "brown", false, "black", false, false, true, false, "long", false, "Character Images\\mia.png");*/
 
     // -=-  Other Game Setup Variables  -=-
-    private static final Person[][] defaultBoard = { // The default board of a player which all new boards will be referencing from.
-        {sam, olivia, nick, david, sofia, liz},
-        {lily, leo, emma, daniel, ben, katie},
-        {al, amy, mike, gabe, farah, jordan},
-        {laura, eric, carmen, rachel, joe, mia}
-    };
+    private static ArrayList<Person> characters;
 
     static Person[][] player1Board; // Player 1 will ALWAYS be an actual user, and NEVER an AI!
-    static Person[][] player2Board; // Player 2 will be either an AI or a user (if we add player vs player).
 
     private static String difficulty = "normal"; // Normal or Hard.
 
     private static int turnTracker; // 1 = Player 1's turn, 2 = Player 2's turn.
 
+    private static Set<Person> aiCharacterList = new HashSet<>();
     private static Person aiCharacter; // The character that the AI randomly selects.
 
 
     // -=-  Getter Methods  -=-
-    /**
-     * This method returns the default board of the game.
-     * @return Person[][]
-     */
-    public Person[][] getDefaultBoard() {
-        return defaultBoard;
-    }
-
     /**
      * This method returns the difficulty of the game.
      * @return String difficulty
@@ -99,22 +93,56 @@ public class GameController {
      * This method sets the AI's character to a random one.
      */
     public static void setAiCharacter() {
-        aiCharacter = player2Board[(int) (Math.random() * 4)][(int) (Math.random() * 6)];
-        System.out.println(aiCharacter.getName());
+        aiCharacter = player1Board[(int) (Math.random() * 4)][(int) (Math.random() * 6)];
     }
 
     // -=-  Auxillery Methods  -=-
     /**
-     * This method resets all players' boards to the default values.
+     * This method reads all the character attributes from a text file to create new objects each game instance.
+     * @throws IOException
      */
-    public static void resetPlayerBoardsToDefault() {
-        player1Board = new Person[4][6];
-        player2Board = new Person[4][6];
+    public static void createNewCharacterList() throws IOException {
+        characters = new ArrayList<>();
 
+        Scanner fileReader = new Scanner(new File("characterAttributes.txt"));
+
+        while (fileReader.hasNextLine()) {
+            String name = fileReader.nextLine();
+            boolean isMale = fileReader.nextBoolean();
+            fileReader.nextLine();
+            String eyeColour = fileReader.nextLine();
+            boolean isLightSkin = fileReader.nextBoolean();
+            fileReader.nextLine();
+            String hairColour = fileReader.nextLine();
+            boolean hasFacialHair = fileReader.nextBoolean();
+            boolean hasGlasses = fileReader.nextBoolean();
+            boolean hasVisibleTeeth = fileReader.nextBoolean();
+            boolean hasHat = fileReader.nextBoolean();
+            fileReader.nextLine();
+            String hairType = fileReader.nextLine();
+            boolean hasEarPiercings = fileReader.nextBoolean();
+            fileReader.nextLine();
+            fileReader.nextLine();
+
+            characters.add(new Person(name, isMale, eyeColour, isLightSkin, hairColour, hasFacialHair, hasGlasses, hasVisibleTeeth, hasHat, hairType, hasEarPiercings));
+        }
+        
+        fileReader.close();
+    }
+
+    /**
+     * This method resets all players' boards to the default values.
+     * @throws IOException 
+     */
+    public static void resetPlayerBoardsToDefault() throws IOException {
+        createNewCharacterList();
+        player1Board = new Person[4][6];
+
+        int counter = 0;
         for (int row = 0; row < 4; row++) {
             for (int col = 0; col < 6; col++) {
-                player1Board[row][col] = defaultBoard[row][col];
-                player2Board[row][col] = defaultBoard[row][col];
+                player1Board[row][col] = characters.get(counter);
+                counter++;
             }
         }
     }
@@ -123,25 +151,30 @@ public class GameController {
      * This method randomly chooses which player goes first.
      */
     public static void chooseRandomFirstTurn() {
-        int randNum = (int) Math.round(Math.random());
-
-        turnTracker = randNum + 1;
+        double randNum = Math.random();
+        turnTracker = (int) (Math.round(randNum) + 1);
     }
 
     /**
      * This method resets all values to their default values for a new game instance.
+     * @throws IOException 
      */
-    public static void newGame() {
+    public static void newGame() throws IOException {
         resetPlayerBoardsToDefault();
         setAiCharacter();
 
-        if ((Question.getQuestionsAsked() != null) && (Question.getQuestionResponses() != null) && (Question.getAiAskedQuestions() != null)) {
+        aiCharacterList = new HashSet<>();
+        for (Person person : characters) {
+            aiCharacterList.add(person);
+        }
+
+        if ((Question.getQuestionsAsked() != null) && (Question.getQuestionResponses() != null) && (Question.getAiAskedQuestions() != null) && (Question.getAiAttributeTracker() != null)) {
             Question.getQuestionsAsked().clear();
             Question.getQuestionResponses().clear();
             Question.getAiAskedQuestions().clear();
+            Question.getAiAttributeTracker().clear();
         }
 
-        Question.getAiAttributeTracker().clear();
         Question.getAiAttributeTracker().put(0, 12); // Ex: Question Index 0 ("Is the person a male?"):12 People With This Attribute
         Question.getAiAttributeTracker().put(1, 13);
         Question.getAiAttributeTracker().put(2, 6);
@@ -161,5 +194,13 @@ public class GameController {
         Question.getAiAttributeTracker().put(16, 5);
         Question.getAiAttributeTracker().put(17, 2);
         Question.getAiAttributeTracker().put(18, 7);
+    }
+
+    public static void updateAiValidCharactersList(boolean response, int questionIndex) {
+        if (response) { // If the user said yes.
+
+        } else { // If the user said no.
+
+        }
     }
 }

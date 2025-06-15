@@ -148,7 +148,9 @@ class GUI extends JFrame implements ActionListener {
 
                 updatePanel(buttonsPanel);
 
-                GameController.newGame();
+                try {
+                    GameController.newGame();
+                } catch (Exception e) {}
                 GameController.chooseRandomFirstTurn();
                 turnSetup();
 
@@ -162,7 +164,9 @@ class GUI extends JFrame implements ActionListener {
 
                 updatePanel(buttonsPanel);
 
-                GameController.newGame();
+                try {
+                    GameController.newGame();
+                } catch (Exception e) {}
                 GameController.chooseRandomFirstTurn();
                 turnSetup();
 
@@ -343,7 +347,8 @@ class GUI extends JFrame implements ActionListener {
      * This method sets up the user response UI.
      */
     private void userResponseButtonsSetup() {
-        String aiQuestion = Question.getQuestionBank()[Question.getNewAiAskedQuestionIndex()]; // Gets the actual question string from the question index.
+        int aiQuestionIndex = Question.getNewAiAskedQuestionIndex();
+        String aiQuestion = Question.getQuestionBank()[aiQuestionIndex]; // Gets the actual question string based on the question index.
         JLabel aiQuestionText = new JLabel("\"" + aiQuestion + "\":");
         aiQuestionText.setFont(new Font("Monospaced", Font.BOLD, 20));
         aiQuestionText.setForeground(textColour);
@@ -363,14 +368,14 @@ class GUI extends JFrame implements ActionListener {
         // Action listener for the yes button.
         yesButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                
+                GameController.updateAiValidCharactersList(true, aiQuestionIndex);
             }
         });
 
         // Action listener for the no button.
         noButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                
+                GameController.updateAiValidCharactersList(false, aiQuestionIndex);
             }
         });
 
