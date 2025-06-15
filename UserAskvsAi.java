@@ -45,3 +45,28 @@ public class UserAskvsAi {
         }
     }
 }
+
+//bc i added that flip think i think we need to add flip method to person class?
+/**
+    //flip visibility of card
+    public void flip() {
+        visible = !visible;
+    }
+
+    //check if card flipped
+    public boolean isFlipped() {
+        return !visible;
+    }
+
+    //check attributes
+    public boolean hasAttribute(int questionIndex) {
+        switch (questionIndex) {
+            case 0: return male;
+            case 1: return glasses;
+            case 2: return hat;
+            //blablabalba
+            default: return false;
+        }
+    }
+    //everything else (other getter setters)
+}*/
