@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class GameController {
     // -=-  Character Set Up  -=-
     // (isMale, eyeColour, hasLightSkin, hairColour, hasFacialHair, hasGlasses, hasVisibleTeeth, hasHat, hairType, hasEarPiercings)
@@ -43,6 +41,8 @@ public class GameController {
 
     private static int turnTracker; // 1 = Player 1's turn, 2 = Player 2's turn.
 
+    private static Person aiCharacter; // The character that the AI randomly selects.
+
 
     // -=-  Getter Methods  -=-
     /**
@@ -69,14 +69,22 @@ public class GameController {
         return turnTracker;
     }
 
+    /**
+     * This method returns the AI's character.
+     * @return Person aiCharacter
+     */
+    public static Person getAiCharacter() {
+        return aiCharacter;
+    }
+
 
     // -=- Setter Methods  -=-
     /**
      * This method sets the difficulty of the new game.
      * @param difficulty
      */
-    public static void setDifficulty(String difficulty) {
-        GameController.difficulty = difficulty;
+    public static void setDifficulty(String level) {
+        difficulty = level;
     }
 
     /**
@@ -84,7 +92,15 @@ public class GameController {
      * @param turn
      */
     public static void setTurn(int turn) {
-        GameController.turnTracker = turn;
+        turnTracker = turn;
+    }
+
+    /**
+     * This method sets the AI's character to a random one.
+     */
+    public static void setAiCharacter() {
+        aiCharacter = player2Board[(int) (Math.random() * 4)][(int) (Math.random() * 6)];
+        System.out.println(aiCharacter.getName());
     }
 
     // -=-  Auxillery Methods  -=-
@@ -103,9 +119,47 @@ public class GameController {
         }
     }
 
+    /**
+     * This method randomly chooses which player goes first.
+     */
     public static void chooseRandomFirstTurn() {
         int randNum = (int) Math.round(Math.random());
 
         turnTracker = randNum + 1;
+    }
+
+    /**
+     * This method resets all values to their default values for a new game instance.
+     */
+    public static void newGame() {
+        resetPlayerBoardsToDefault();
+        setAiCharacter();
+
+        if ((Question.getQuestionsAsked() != null) && (Question.getQuestionResponses() != null) && (Question.getAiAskedQuestions() != null)) {
+            Question.getQuestionsAsked().clear();
+            Question.getQuestionResponses().clear();
+            Question.getAiAskedQuestions().clear();
+        }
+
+        Question.getAiAttributeTracker().clear();
+        Question.getAiAttributeTracker().put(0, 12); // Ex: Question Index 0 ("Is the person a male?"):12 People With This Attribute
+        Question.getAiAttributeTracker().put(1, 13);
+        Question.getAiAttributeTracker().put(2, 6);
+        Question.getAiAttributeTracker().put(3, 5);
+        Question.getAiAttributeTracker().put(4, 11);
+        Question.getAiAttributeTracker().put(5, 10);
+        Question.getAiAttributeTracker().put(6, 4);
+        Question.getAiAttributeTracker().put(7, 2);
+        Question.getAiAttributeTracker().put(8, 3);
+        Question.getAiAttributeTracker().put(9, 5);
+        Question.getAiAttributeTracker().put(10, 6);
+        Question.getAiAttributeTracker().put(11, 6);
+        Question.getAiAttributeTracker().put(12, 10);
+        Question.getAiAttributeTracker().put(13, 5);
+        Question.getAiAttributeTracker().put(14, 12);
+        Question.getAiAttributeTracker().put(15, 5);
+        Question.getAiAttributeTracker().put(16, 5);
+        Question.getAiAttributeTracker().put(17, 2);
+        Question.getAiAttributeTracker().put(18, 7);
     }
 }
