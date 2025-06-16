@@ -179,7 +179,6 @@ public class Question {
             return -1;
         }
 
-        int bestQuestion = 0;
         double smallestDiff = Double.MAX_VALUE;
 
         // Check all unasked questions
@@ -281,7 +280,7 @@ public class Question {
                 // Track best question
                 if (diff < smallestDiff) {
                     smallestDiff = diff;
-                    bestQuestion = qIndex;
+                    questionIndex = qIndex;
                 }
             }
         }
