@@ -201,7 +201,7 @@ public class GameController {
         Question.getAiAttributeTracker().put(17, 2);
         Question.getAiAttributeTracker().put(18, 7);
     }
-
+  
     public static void updateAiValidCharactersList(boolean response, int questionIndex) {
         ArrayList<Person> removingCharacters = new ArrayList<>();
 
