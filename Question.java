@@ -30,7 +30,6 @@ public class Question {
     private static ArrayList<Integer> questionsAsked; // For simplicity, the questions are mapped to specific integer values -> refer to the "Question.java" file for more info.
     private static ArrayList<Boolean> questionResponses; // true = yes, false = no
     private static Set<Integer> aiAskedQuestions = new HashSet<>();
-    private static Map<Integer, Integer> aiAttributeTracker = new HashMap<>(); // Question Index:# of Characters With Attribute
 
     // -=-  Getter Methods  -=-
     /**
@@ -63,14 +62,6 @@ public class Question {
      */
     public static Set<Integer> getAiAskedQuestions() {
         return aiAskedQuestions;
-    }
-
-    /**
-     * This method returns a hashmap of the AI's attrivute tracker.
-     * @return Set<Integer> aiAskedQuestions.
-     */
-    public static Map<Integer, Integer> getAiAttributeTracker() {
-        return aiAttributeTracker;
     }
 
     
