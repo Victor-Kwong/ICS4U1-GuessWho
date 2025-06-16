@@ -330,9 +330,9 @@ class GUI extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(buttonsPanel, "You Guessed: " + selectedOption + "\nThe AI Says: " + Question.validateUserGuess(guessDropDown.getSelectedItem().toString()));
 
                 if (Question.validateUserGuess(guessDropDown.getSelectedItem().toString()).equals("Yes, you win!")) {
-                    // File writing to history text file goes here!
+                    GameController.recordGameResult("You guessed \"" + selectedOption + "\" and won!");
                 } else {
-                    // File writing to history text file goes here!
+                    GameController.recordGameResult("You guessed \"" + selectedOption + "\" and lost.");
                 }
 
                 boardPanel.removeAll();
