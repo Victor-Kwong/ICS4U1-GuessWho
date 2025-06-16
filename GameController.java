@@ -554,7 +554,7 @@ public class GameController {
 
     // Timer Mode Variables
     private static boolean timerMode = false;
-    private static final int defaultTimer = 3; // 180 seconds -> 3 minutes
+    private static final int defaultTimer = 180; // 180 seconds -> 3 minutes
     static int timer;
 
     /**
