@@ -85,6 +85,9 @@ class GUI extends JFrame implements ActionListener {
         // "Play" Button
         playButton = createButton(buttonsPanel, "Play");
 
+        // "View History" Button
+        viewHistoryButton = createButton(buttonsPanel, "View History"); //vic added this 
+
         // Padding between buttons panel and board panel.
         mainPanel.add(Box.createVerticalStrut(30));
 
@@ -112,7 +115,6 @@ class GUI extends JFrame implements ActionListener {
 
                 mainMenuButton = createButton(buttonsPanel, "Main Menu");
                 humanVsComputerButton = createButton(buttonsPanel, "Human VS Computer");
-                viewHistoryButton = createButton(buttonsPanel, "View History"); //vic added this 
  
                 updatePanel(buttonsPanel);
 
@@ -120,12 +122,13 @@ class GUI extends JFrame implements ActionListener {
                 
             case "View History":// Code that executes when the "View history" button is pressed.
                 showGameHistory();
-                break;
 
+                break;
             case "Main Menu": // Code that executes when the "Main Menu" button is pressed.
                 buttonsPanel.removeAll();
 
                 addButton(playButton);
+                addButton(viewHistoryButton);
                 
                 updatePanel(buttonsPanel);
 
@@ -338,9 +341,9 @@ class GUI extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(buttonsPanel, "You Guessed: " + selectedOption + "\nThe AI Says: " + Question.validateUserGuess(guessDropDown.getSelectedItem().toString()));
 
                 if (Question.validateUserGuess(guessDropDown.getSelectedItem().toString()).equals("Yes, you win!")) {
-                    GameController.recordGameResult("You guessed \"" + selectedOption + "\" and won!");
+                    GameController.recordGameResult("[" + GameController.getDateTime() + "] " + "You guessed \"" + selectedOption + "\" and won!");
                 } else {
-                    GameController.recordGameResult("You guessed \"" + selectedOption + "\" and lost.");
+                    GameController.recordGameResult("[" + GameController.getDateTime() + "] " + "You guessed \"" + selectedOption + "\" and lost.");
                 }
 
                 boardPanel.removeAll();
@@ -349,6 +352,7 @@ class GUI extends JFrame implements ActionListener {
                 updatePanel(mainPanel);
 
                 addButton(playButton);
+                addButton(viewHistoryButton);
             }
         });
 
@@ -452,18 +456,24 @@ class GUI extends JFrame implements ActionListener {
         if (option == 1) { // User loses, and AI wins.
             JOptionPane.showMessageDialog(buttonsPanel, "You lose, the AI wins!");
 
+            GameController.recordGameResult("[" + GameController.getDateTime() + "] " + "The AI guessed your character correctly, and you lost!");
+
             boardPanel.removeAll();
             buttonsPanel.removeAll();
-            buttonsPanel.add(playButton);
+            addButton(playButton);
+            addButton(viewHistoryButton);
 
             updatePanel(buttonsPanel);
             updatePanel(boardPanel);
         } else if (option == 2) {// User loses, and user lied.
             JOptionPane.showMessageDialog(buttonsPanel, "You lose, you lied somewhere!");
 
+            GameController.recordGameResult("[" + GameController.getDateTime() + "] " + "The AI didn't guess your character, but you lied!");
+
             boardPanel.removeAll();
             buttonsPanel.removeAll();
-            buttonsPanel.add(playButton);
+            addButton(playButton);
+            addButton(viewHistoryButton);
 
             updatePanel(buttonsPanel);
             updatePanel(boardPanel);
@@ -515,6 +525,10 @@ class GUI extends JFrame implements ActionListener {
         
         updatePanel(boardPanel);
     }
+
+    /**
+     * This method shows the game history.
+     */
     private void showGameHistory() {
         String history = GameController.getGameHistory(); 
         if (history == null || history.isEmpty()) {

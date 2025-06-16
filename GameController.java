@@ -1,5 +1,8 @@
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -436,6 +439,11 @@ public class GameController {
         }
         
     }
+
+    /**
+     * This method writes to a file for history viewing.
+     * @param result
+     */
     public static void recordGameResult(String result) {
         try {
             File file = new File("game_history.txt");
@@ -447,39 +455,58 @@ public class GameController {
                 }
                 scanner.close();
             }
+
             ArrayList<String> updatedLines = new ArrayList<>();
             updatedLines.add(result);
             for (int i = 0; i < lines.size() && i < 4; i++) {//only last 5 match results
                 updatedLines.add(lines.get(i));
             }
+
             FileWriter writer = new FileWriter(file);
             for (int i = 0; i < updatedLines.size(); i++) {
                 writer.write(updatedLines.get(i) + "\n");
             }
+
             writer.close();
         } catch (IOException e) {
             System.out.println("Error writing game history: " + e.getMessage());
         }
     }
+
+    /**
+     * This method reads from a file to get the game history.
+     * @return
+     */
     public static String getGameHistory() {
-    String history = "";
-    File file = new File("game_history.txt");
-    try {
-        if (file.exists()) {
-            Scanner scanner = new Scanner(file);
-            int count = 1;
-            while (scanner.hasNextLine()) {
-                history += count + ". " + scanner.nextLine() + "\n";
-                count++;
+        String history = "";
+        File file = new File("game_history.txt");
+
+        try {
+            if (file.exists()) {
+                Scanner scanner = new Scanner(file);
+                int count = 1;
+
+                while (scanner.hasNextLine()) {
+                    history += count + ". " + scanner.nextLine() + "\n";
+                    count++;
+                }
+                scanner.close();
+            } else {
+                history = "No game history found.";
             }
-            scanner.close();
-        } else {
-            history = "No game history found.";
+        } catch (IOException e) {
+            history = "Error reading history: " + e.getMessage();
         }
-    } catch (IOException e) {
-        history = "Error reading history: " + e.getMessage();
+
+        return history;
     }
-    return history;
-}
+
+    public static String getDateTime() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = now.format(formatter);
+
+        return formattedDateTime;
+    }
 
 }
