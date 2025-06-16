@@ -1,9 +1,7 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Scanner;
-import java.util.Set;
 
 public class GameController {
     // -=-  Character Set Up  -=-
@@ -42,7 +40,7 @@ public class GameController {
 
     private static int turnTracker; // 1 = Player 1's turn, 2 = Player 2's turn.
 
-    private static Set<Person> aiCharacterList = new HashSet<>();
+    private static ArrayList<Person> aiCharacterList = new ArrayList<>();
     private static Person aiCharacter; // The character that the AI randomly selects.
 
 
@@ -69,6 +67,14 @@ public class GameController {
      */
     public static Person getAiCharacter() {
         return aiCharacter;
+    }
+
+    /**
+     * This method returns the AI's character list.
+     * @return ArrayList<Person> aiCharacterList
+     */
+    public static ArrayList<Person> getAiCharacterList() {
+        return aiCharacterList;
     }
 
 
@@ -163,7 +169,7 @@ public class GameController {
         resetPlayerBoardsToDefault();
         setAiCharacter();
 
-        aiCharacterList = new HashSet<>();
+        aiCharacterList = new ArrayList<>();
         for (Person person : characters) {
             aiCharacterList.add(person);
         }
@@ -197,10 +203,279 @@ public class GameController {
     }
 
     public static void updateAiValidCharactersList(boolean response, int questionIndex) {
-        if (response) { // If the user said yes.
+        ArrayList<Person> removingCharacters = new ArrayList<>();
 
-        } else { // If the user said no.
+        switch (questionIndex) {
+            case 0: // "Is the person a male?"
+                for (int i = 0; i < aiCharacterList.size(); i++) {
+                    Person character = aiCharacterList.get(i);
 
+                    if (character.getVisibility()) { // If character is not "hidden".
+                        if (response && !character.isMale()) { // Remove all females.
+                            removingCharacters.add(character);
+                        } else if (!response && character.isMale()) { // Remove all males.
+                            removingCharacters.add(character);
+                        }
+                    }
+                }
+
+                break;
+            case 1: // "Is the eye colour brown?"
+                for (int i = 0; i < aiCharacterList.size(); i++) {
+                    Person character = aiCharacterList.get(i);
+
+                    if (character.getVisibility()) { // If character is not "hidden".
+                        if (response && !character.getEyeColour().equals("brown")) { // Remove all non brown eyed people.
+                            removingCharacters.add(character);
+                        } else if (!response && character.getEyeColour().equals("brown")) { // Remove all brown eyed people.
+                            removingCharacters.add(character);
+                        }
+                    }
+                }
+
+                break;
+            case 2: // "Is the eye colour green?"
+                for (int i = 0; i < aiCharacterList.size(); i++) {
+                    Person character = aiCharacterList.get(i);
+
+                    if (character.getVisibility()) { // If character is not "hidden".
+                        if (response && !character.getEyeColour().equals("green")) { // Remove all non green eyed people.
+                            removingCharacters.add(character);
+                        } else if (!response && character.getEyeColour().equals("green")) { // Remove all green eyed people.
+                            removingCharacters.add(character);
+                        }
+                    }
+                }
+
+                break;
+            case 3: // "Is the eye colour blue?"
+                for (int i = 0; i < aiCharacterList.size(); i++) {
+                    Person character = aiCharacterList.get(i);
+
+                    if (character.getVisibility()) { // If character is not "hidden".
+                        if (response && !character.getEyeColour().equals("blue")) { // Remove all non blue eyed people.
+                            removingCharacters.add(character);
+                        } else if (!response && character.getEyeColour().equals("blue")) { // Remove all blue eyed people.
+                            removingCharacters.add(character);
+                        }
+                    }
+                }
+
+                break;
+            case 4: // "Does the person have a light skin tone?"
+                for (int i = 0; i < aiCharacterList.size(); i++) {
+                    Person character = aiCharacterList.get(i);
+
+                    if (character.getVisibility()) { // If character is not "hidden".
+                        if (response && !character.isLightSkin()) { // Remove all dark skin toned people.
+                            removingCharacters.add(character);
+                        } else if (!response && character.isLightSkin()) { // Remove all light skin toned people.
+                            removingCharacters.add(character);
+                        }
+                    }
+                }
+
+                break;
+            case 5: // "Is the hair colour black?"
+                for (int i = 0; i < aiCharacterList.size(); i++) {
+                    Person character = aiCharacterList.get(i);
+
+                    if (character.getVisibility()) { // If character is not "hidden".
+                        if (response && !character.getHairColour().equals("black")) { // Remove all non black haired people.
+                            removingCharacters.add(character);
+                        } else if (!response && character.getHairColour().equals("black")) { // Remove all black haired people.
+                            removingCharacters.add(character);
+                        }
+                    }
+                }
+
+                break;
+            case 6: // "Is the hair colour brown?"
+                for (int i = 0; i < aiCharacterList.size(); i++) {
+                    Person character = aiCharacterList.get(i);
+
+                    if (character.getVisibility()) { // If character is not "hidden".
+                        if (response && !character.getHairColour().equals("brown")) { // Remove all non brown haired people.
+                            removingCharacters.add(character);
+                        } else if (!response && character.getHairColour().equals("brown")) { // Remove all brown haired people.
+                            removingCharacters.add(character);
+                        }
+                    }
+                }
+
+                break;
+            case 7: // "Is the hair colour ginger?"
+                for (int i = 0; i < aiCharacterList.size(); i++) {
+                    Person character = aiCharacterList.get(i);
+
+                    if (character.getVisibility()) { // If character is not "hidden".
+                        if (response && !character.getHairColour().equals("ginger")) { // Remove all non ginger haired people.
+                            removingCharacters.add(character);
+                        } else if (!response && character.getHairColour().equals("ginger")) { // Remove all ginger haired people.
+                            removingCharacters.add(character);
+                        }
+                    }
+                }
+
+                break;
+            case 8: // "Is the hair colour blonde?"
+                for (int i = 0; i < aiCharacterList.size(); i++) {
+                    Person character = aiCharacterList.get(i);
+
+                    if (character.getVisibility()) { // If character is not "hidden".
+                        if (response && !character.getHairColour().equals("blonde")) { // Remove all non blonde haired people.
+                            removingCharacters.add(character);
+                        } else if (!response && character.getHairColour().equals("blonde")) { // Remove all blonde haired people.
+                            removingCharacters.add(character);
+                        }
+                    }
+                }
+
+                break;
+            case 9: // "Is the hair colour white?"
+                for (int i = 0; i < aiCharacterList.size(); i++) {
+                    Person character = aiCharacterList.get(i);
+
+                    if (character.getVisibility()) { // If character is not "hidden".
+                        if (response && !character.getHairColour().equals("white")) { // Remove all non white haired people.
+                            removingCharacters.add(character);
+                        } else if (!response && character.getHairColour().equals("white")) { // Remove all white haired people.
+                            removingCharacters.add(character);
+                        }
+                    }
+                }
+
+                break;
+            case 10: // "Does the person have facial hair?"
+                for (int i = 0; i < aiCharacterList.size(); i++) {
+                    Person character = aiCharacterList.get(i);
+
+                    if (character.getVisibility()) { // If character is not "hidden".
+                        if (response && !character.hasFacialHair()) { // Remove all non facial haired people.
+                            removingCharacters.add(character);
+                        } else if (!response && character.hasFacialHair()) { // Remove all facial haired people.
+                            removingCharacters.add(character);
+                        }
+                    }
+                }
+
+                break;
+            case 11: // "Is the person wearing glasses?"
+                for (int i = 0; i < aiCharacterList.size(); i++) {
+                    Person character = aiCharacterList.get(i);
+
+                    if (character.getVisibility()) { // If character is not "hidden".
+                        if (response && !character.hasGlasses()) { // Remove all people without glasses
+                            removingCharacters.add(character);
+                        } else if (!response && character.hasGlasses()) { // Remove all people with glasses.
+                            removingCharacters.add(character);
+                        }
+                    }
+                }
+
+                break;
+            case 12: // "Does the person have visible teeth?"
+                for (int i = 0; i < aiCharacterList.size(); i++) {
+                    Person character = aiCharacterList.get(i);
+
+                    if (character.getVisibility()) { // If character is not "hidden".
+                        if (response && !character.hasVisibleTeeth()) { // Remove all people without visible teeth.
+                            removingCharacters.add(character);
+                        } else if (!response && character.hasVisibleTeeth()) { // Remove all people with visible teeth.
+                            removingCharacters.add(character);
+                        }
+                    }
+                }
+
+                break;
+            case 13: // "Is the person wearing a hat?"
+                for (int i = 0; i < aiCharacterList.size(); i++) {
+                    Person character = aiCharacterList.get(i);
+
+                    if (character.getVisibility()) { // If character is not "hidden".
+                        if (response && !character.hasHat()) { // Remove all people without hats.
+                            removingCharacters.add(character);
+                        } else if (!response && character.hasHat()) { // Remove all people with hats.
+                            removingCharacters.add(character);
+                        }
+                    }
+                }
+
+                break;
+            case 14: // "Does the person have short hair?"
+                for (int i = 0; i < aiCharacterList.size(); i++) {
+                    Person character = aiCharacterList.get(i);
+
+                    if (character.getVisibility()) { // If character is not "hidden".
+                        if (response && !character.getHairType().equals("short")) { // Remove all non short haired people.
+                            removingCharacters.add(character);
+                        } else if (!response && character.getHairType().equals("short")) { // Remove all short haired people.
+                            removingCharacters.add(character);
+                        }
+                    }
+                }
+
+                break;
+            case 15: // "Does the person have their hair tied up?"
+                for (int i = 0; i < aiCharacterList.size(); i++) {
+                    Person character = aiCharacterList.get(i);
+
+                    if (character.getVisibility()) { // If character is not "hidden".
+                        if (response && !character.getHairType().equals("tied")) { // Remove all non tied hair people.
+                            removingCharacters.add(character);
+                        } else if (!response && character.getHairType().equals("tied")) { // Remove all tied hair people.
+                            removingCharacters.add(character);
+                        }
+                    }
+                }
+
+                break;
+            case 16: // "Does the person have long hair?"
+                for (int i = 0; i < aiCharacterList.size(); i++) {
+                    Person character = aiCharacterList.get(i);
+
+                    if (character.getVisibility()) { // If character is not "hidden".
+                        if (response && !character.getHairType().equals("long")) { // Remove all non long haired people.
+                            removingCharacters.add(character);
+                        } else if (!response && character.getHairType().equals("long")) { // Remove all long haired people.
+                            removingCharacters.add(character);
+                        }
+                    }
+                }
+
+                break;
+            case 17: // "Is the person bald?"
+                for (int i = 0; i < aiCharacterList.size(); i++) {
+                    Person character = aiCharacterList.get(i);
+
+                    if (character.getVisibility()) { // If character is not "hidden".
+                        if (response && !character.getHairType().equals("bald")) { // Remove all non bald people.
+                            removingCharacters.add(character);
+                        } else if (!response && character.getHairType().equals("bald")) { // Remove all bald people.
+                            removingCharacters.add(character);
+                        }
+                    }
+                }
+
+                break;
+            case 18: // "Does the person have ear piercings?"
+                for (int i = 0; i < aiCharacterList.size(); i++) {
+                    Person character = aiCharacterList.get(i);
+
+                    if (character.getVisibility()) { // If character is not "hidden".
+                        if (response && !character.hasEarPiercings()) { // Remove all people without ear piercings.
+                            removingCharacters.add(character);
+                        } else if (!response && character.hasEarPiercings()) { // Remove all people with ear piercings.
+                            removingCharacters.add(character);
+                        }
+                    }
+                }
+
+                break;
+        }
+
+        for (Person person : removingCharacters) {
+            aiCharacterList.remove(person);
         }
     }
 }

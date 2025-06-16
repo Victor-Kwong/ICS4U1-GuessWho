@@ -102,61 +102,61 @@ public class Question {
         boolean response = false;
 
         switch (questionIndex) {
-            case 0:
+            case 0: // "Is the person a male?"
                 response = GameController.getAiCharacter().isMale() == true;
                 break;
-            case 1:
+            case 1: // "Is the eye colour brown?"
                 response = GameController.getAiCharacter().getEyeColour().equals("brown");
                 break;
-            case 2:
+            case 2: // "Is the eye colour green"
                 response = GameController.getAiCharacter().getEyeColour().equals("green");
                 break;
-            case 3:
+            case 3: // "Is the eye colour blue?"
                 response = GameController.getAiCharacter().getEyeColour().equals("blue");
                 break;
-            case 4:
+            case 4: // "Does the person have a light skin tone?
                 response = GameController.getAiCharacter().isLightSkin() == true;
                 break;
-            case 5:
+            case 5: // "Is the hair colour black?"
                 response = GameController.getAiCharacter().getHairColour().equals("black");
                 break;
-            case 6:
+            case 6: // "Is the hair colour brown?"
                 response = GameController.getAiCharacter().getHairColour().equals("brown");
                 break;
-            case 7:
+            case 7: // "Is the hair colour ginger?"
                 response = GameController.getAiCharacter().getHairColour().equals("ginger");
                 break;
-            case 8:
+            case 8: // "Is the hair colour blonde?"
                 response = GameController.getAiCharacter().getHairColour().equals("blonde");
                 break;
-            case 9:
+            case 9: // "Is the hair colour white?"
                 response = GameController.getAiCharacter().getHairColour().equals("white");
                 break;
-            case 10:
+            case 10: // "Does the person have facial hair?"
                 response = GameController.getAiCharacter().hasFacialHair() == true;
                 break;
-            case 11:
+            case 11: // "Does the person have glasses?"
                 response = GameController.getAiCharacter().hasGlasses() == true;
                 break;
-            case 12:
+            case 12: // "Does the person have visible teeth?"
                 response = GameController.getAiCharacter().hasVisibleTeeth() == true;
                 break;
-            case 13:
+            case 13: // "Is the person wearing a hat?"
                 response = GameController.getAiCharacter().hasHat() == true;
                 break;
-            case 14:
+            case 14: // "Does the person have short hair?"
                 response = GameController.getAiCharacter().getHairType().equals("short");
                 break;
-            case 15:
+            case 15: // "Does the person have their hair tied up?"
                 response = GameController.getAiCharacter().getHairType().equals("tied");
                 break;
-            case 16:
+            case 16: // "Does the person have long hair?"
                 response = GameController.getAiCharacter().getHairType().equals("long");
                 break;
-            case 17:
+            case 17: // "Is the person bald?"
                 response = GameController.getAiCharacter().getHairType().equals("bald");
                 break;
-            case 18:
+            case 18: // "Does the person have ear piercings?"
                 response = GameController.getAiCharacter().hasEarPiercings() == true;
                 break;
         }
