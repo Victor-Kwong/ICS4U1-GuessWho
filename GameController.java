@@ -501,6 +501,10 @@ public class GameController {
         return history;
     }
 
+    /**
+     * Returns the current date and time.
+     * @return
+     */
     public static String getDateTime() {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
