@@ -43,6 +43,8 @@ class GUI extends JFrame implements ActionListener {
     static private JButton mainMenuButton;
     static private JButton humanVsComputerButton;
 
+    static private JButton viewHistoryButton;
+
 
     // -=-  GuiFrame Constructor  -=-
     GUI() {
@@ -110,10 +112,16 @@ class GUI extends JFrame implements ActionListener {
 
                 mainMenuButton = createButton(buttonsPanel, "Main Menu");
                 humanVsComputerButton = createButton(buttonsPanel, "Human VS Computer");
-
+                viewHistoryButton = createButton(buttonsPanel, "View History"); //vic added this 
+ 
                 updatePanel(buttonsPanel);
 
                 break;
+                
+            case "View History":// Code that executes when the "View history" button is pressed.
+                showGameHistory();
+                break;
+
             case "Main Menu": // Code that executes when the "Main Menu" button is pressed.
                 buttonsPanel.removeAll();
 
@@ -507,4 +515,12 @@ class GUI extends JFrame implements ActionListener {
         
         updatePanel(boardPanel);
     }
+    private void showGameHistory() {
+        String history = GameController.getGameHistory(); 
+        if (history == null || history.isEmpty()) {
+            history = "No game history available.";
+        }
+        JOptionPane.showMessageDialog(this, history, "Game History", JOptionPane.INFORMATION_MESSAGE);
+}
+
 }
