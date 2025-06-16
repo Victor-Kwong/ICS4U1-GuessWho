@@ -525,6 +525,8 @@ public class GameController {
      * @throws UnsupportedAudioFileException
      */
     public static void audioSetup() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
+        playingMusic = true;
+
         File audioFile = new File("music.wav");
         AudioInputStream stream = AudioSystem.getAudioInputStream(audioFile);
 
