@@ -332,13 +332,20 @@ class GUI extends JFrame implements ActionListener {
             buttonsPanel.add(turnTrackerText);
 
             buttonsPanel.add(Box.createHorizontalStrut(30)); // Padding between the turn tracker text and the user response buttons.
+            
+            System.out.println();
+            for (Person person : GameController.getAiCharacterList()) {
+                System.out.print(person.getName() + " ");
+            }
 
             if (GameController.getAiCharacterList().size() == 0) {
                 loseGame(2);
-            } else if (GameController.getAiCharacterList().size() == 1){
-                userResponseButtonsSetup(true);
+            } else if (GameController.getAiCharacterList().size() == 1) {
+                userResponseButtonsSetup(1);
+            } else if (GameController.getAiCharacterList().size() == 2 && GameController.getDifficulty().equals("Hard")) {
+                userResponseButtonsSetup(2);
             } else {
-                userResponseButtonsSetup(false);
+                userResponseButtonsSetup(3);
             }
         }
 
@@ -436,8 +443,8 @@ class GUI extends JFrame implements ActionListener {
     /**
      * This method sets up the user response UI.
      */
-    private void userResponseButtonsSetup(boolean onlyOneCharacterLeft) {
-        if (onlyOneCharacterLeft) {
+    private void userResponseButtonsSetup(int option) {
+        if (option == 1) { // Choose the only remaining character.
             JLabel aiQuestionText = new JLabel("\"Is your character " + GameController.getAiCharacterList().get(0).getName() + "?\":");
             aiQuestionText.setFont(new Font("Monospaced", Font.BOLD, 20));
             aiQuestionText.setForeground(textColour);
@@ -465,6 +472,55 @@ class GUI extends JFrame implements ActionListener {
             noButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     loseGame(2);
+                }
+            });
+
+            buttonsPanel.add(aiQuestionText);
+            buttonsPanel.add(yesButton);
+            buttonsPanel.add(noButton);
+        } else if (option == 2) { // Choose a character out of the 2 (always the character on index 0, since we don't 100% know, so it doesn't matter if we randomize the guess or not).
+            JLabel aiQuestionText = new JLabel("\"Is your character " + GameController.getAiCharacterList().get(0).getName() + "?\":");
+            aiQuestionText.setFont(new Font("Monospaced", Font.BOLD, 20));
+            aiQuestionText.setForeground(textColour);
+
+            JButton yesButton = new JButton("Yes");
+            yesButton.setFont(new Font("Monospaced", Font.BOLD, 15));
+            yesButton.setForeground(textColour);
+            yesButton.setBackground(buttonColour);
+            yesButton.setFocusPainted(false);
+
+            JButton noButton = new JButton("No");
+            noButton.setFont(new Font("Monospaced", Font.BOLD, 15));
+            noButton.setForeground(textColour);
+            noButton.setBackground(buttonColour);
+            noButton.setFocusPainted(false);
+
+            // Action listener for the yes button.
+            yesButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    loseGame(1);
+                }
+            });
+
+            // Action listener for the no button.
+            noButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    JOptionPane.showMessageDialog(buttonsPanel, "The AI guessed \"" + GameController.getAiCharacterList().get(0).getName() + "\", and you won!");
+                    GameController.recordGameResult("[" + GameController.getDateTime() + "] {" + GameController.getDifficulty() + " Difficulty} (Timer: " + GameController.getTimerMode() + ")  →  " + "The AI guessed \"" + GameController.getAiCharacterList().get(0).getName() + "\", and you won!");
+                
+                    boardPanel.removeAll();
+                    buttonsPanel.removeAll();
+                    timerPanel.removeAll();
+                    try {
+                        timer.stop();
+                    } catch (Exception err) {}
+
+                    updatePanel(mainPanel);
+
+                    addButton(playButton);
+                    addButton(viewHistoryButton);
+                    addButton(toggleMusicButton);
+                    addButton(toggleTimerModerButton);
                 }
             });
 
