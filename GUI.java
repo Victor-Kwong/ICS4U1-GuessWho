@@ -333,11 +333,6 @@ class GUI extends JFrame implements ActionListener {
 
             buttonsPanel.add(Box.createHorizontalStrut(30)); // Padding between the turn tracker text and the user response buttons.
             
-            System.out.println();
-            for (Person person : GameController.getAiCharacterList()) {
-                System.out.print(person.getName() + " ");
-            }
-
             if (GameController.getAiCharacterList().size() == 0) {
                 loseGame(2);
             } else if (GameController.getAiCharacterList().size() == 1) {
