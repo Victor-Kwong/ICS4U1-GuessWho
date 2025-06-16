@@ -6,6 +6,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 public class GameController {
     // -=-  Other Game Setup Variables  -=-
     private static ArrayList<Person> characters;
@@ -432,11 +439,6 @@ public class GameController {
         for (Person person : removingCharacters) {
             aiCharacterList.remove(person);
         }
-
-        System.out.println();
-        for (Person person : aiCharacterList) {
-            System.out.print(person.getName() + " ");
-        }
         
     }
 
@@ -513,4 +515,37 @@ public class GameController {
         return formattedDateTime;
     }
 
+    // Music Variables
+    private static Clip music;
+    private static boolean playingMusic;
+    /**
+     * This method setups the audio/music of the game.
+     * @throws LineUnavailableException
+     * @throws IOException
+     * @throws UnsupportedAudioFileException
+     */
+    public static void audioSetup() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
+        File audioFile = new File("music.wav");
+        AudioInputStream stream = AudioSystem.getAudioInputStream(audioFile);
+
+        music = AudioSystem.getClip();
+
+        music.open(stream);
+        music.start();
+        music.loop(Clip.LOOP_CONTINUOUSLY);
+	}
+
+    /**
+     * This method helps with toggling the music (muting/unmuting).
+     */
+    public static void toggleMusic() {
+        if (playingMusic) {
+            music.stop();
+        } else {
+            music.start();
+            music.loop(Clip.LOOP_CONTINUOUSLY);
+        }
+
+        playingMusic = !playingMusic;
+    }
 }

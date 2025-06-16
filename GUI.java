@@ -44,6 +44,7 @@ class GUI extends JFrame implements ActionListener {
     static private JButton humanVsComputerButton;
 
     static private JButton viewHistoryButton;
+    static private JButton toggleMusicButton;
 
 
     // -=-  GuiFrame Constructor  -=-
@@ -88,6 +89,9 @@ class GUI extends JFrame implements ActionListener {
         // "View History" Button
         viewHistoryButton = createButton(buttonsPanel, "View History"); //vic added this 
 
+        // "Toggle Music" Button
+        toggleMusicButton = createButton(buttonsPanel, "Toggle Music");
+
         // Padding between buttons panel and board panel.
         mainPanel.add(Box.createVerticalStrut(30));
 
@@ -120,8 +124,12 @@ class GUI extends JFrame implements ActionListener {
 
                 break;
                 
-            case "View History":// Code that executes when the "View history" button is pressed.
+            case "View History": // Code that executes when the "View History" button is pressed.
                 showGameHistory();
+
+                break;
+            case "Toggle Music": // Code that executes when the "Toggle Music" button is pressed.
+                GameController.toggleMusic();
 
                 break;
             case "Main Menu": // Code that executes when the "Main Menu" button is pressed.
@@ -129,6 +137,7 @@ class GUI extends JFrame implements ActionListener {
 
                 addButton(playButton);
                 addButton(viewHistoryButton);
+                addButton(toggleMusicButton);
                 
                 updatePanel(buttonsPanel);
 
@@ -353,6 +362,7 @@ class GUI extends JFrame implements ActionListener {
 
                 addButton(playButton);
                 addButton(viewHistoryButton);
+                addButton(toggleMusicButton);
             }
         });
 
@@ -462,6 +472,7 @@ class GUI extends JFrame implements ActionListener {
             buttonsPanel.removeAll();
             addButton(playButton);
             addButton(viewHistoryButton);
+            addButton(toggleMusicButton);
 
             updatePanel(buttonsPanel);
             updatePanel(boardPanel);
@@ -474,6 +485,7 @@ class GUI extends JFrame implements ActionListener {
             buttonsPanel.removeAll();
             addButton(playButton);
             addButton(viewHistoryButton);
+            addButton(toggleMusicButton);
 
             updatePanel(buttonsPanel);
             updatePanel(boardPanel);
