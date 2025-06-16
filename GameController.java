@@ -16,7 +16,6 @@ public class GameController {
     private static ArrayList<Person> aiCharacterList = new ArrayList<>();
     private static Person aiCharacter; // The character that the AI randomly selects.
 
-
     // -=-  Getter Methods  -=-
     /**
      * This method returns the difficulty of the game.
@@ -80,6 +79,7 @@ public class GameController {
      * This method reads all the character attributes from a text file to create new objects each game instance.
      * @throws IOException
      */
+    
     public static void createNewCharacterList() throws IOException {
         characters = new ArrayList<>();
 
@@ -434,5 +434,52 @@ public class GameController {
         for (Person person : aiCharacterList) {
             System.out.print(person.getName() + " ");
         }
+        
     }
+    public static void recordGameResult(String result) {
+        try {
+            File file = new File("game_history.txt");
+            ArrayList<String> lines = new ArrayList<>();
+            if (file.exists()) {
+                Scanner scanner = new Scanner(file);
+                while (scanner.hasNextLine()) {
+                    lines.add(scanner.nextLine());
+                }
+                scanner.close();
+            }
+            ArrayList<String> updatedLines = new ArrayList<>();
+            updatedLines.add(result);
+            for (int i = 0; i < lines.size() && i < 4; i++) {//only last 5 match results
+                updatedLines.add(lines.get(i));
+            }
+            FileWriter writer = new FileWriter(file);
+            for (int i = 0; i < updatedLines.size(); i++) {
+                writer.write(updatedLines.get(i) + "\n");
+            }
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("Error writing game history: " + e.getMessage());
+        }
+    }
+    public static String getGameHistory() {
+    String history = "";
+    File file = new File("game_history.txt");
+    try {
+        if (file.exists()) {
+            Scanner scanner = new Scanner(file);
+            int count = 1;
+            while (scanner.hasNextLine()) {
+                history += count + ". " + scanner.nextLine() + "\n";
+                count++;
+            }
+            scanner.close();
+        } else {
+            history = "No game history found.";
+        }
+    } catch (IOException e) {
+        history = "Error reading history: " + e.getMessage();
+    }
+    return history;
+}
+
 }
