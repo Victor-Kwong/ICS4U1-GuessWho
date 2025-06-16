@@ -256,7 +256,13 @@ class GUI extends JFrame implements ActionListener {
 
             buttonsPanel.add(Box.createHorizontalStrut(30)); // Padding between the turn tracker text and the user response buttons.
 
-            userResponseButtonsSetup();
+            if (GameController.getAiCharacterList().size() == 0) {
+                loseGame(2);
+            } else if (GameController.getAiCharacterList().size() == 1){
+                userResponseButtonsSetup(true);
+            } else {
+                userResponseButtonsSetup(false);
+            }
         }
 
         updatePanel(buttonsPanel);
@@ -346,42 +352,114 @@ class GUI extends JFrame implements ActionListener {
     /**
      * This method sets up the user response UI.
      */
-    private void userResponseButtonsSetup() {
-        int aiQuestionIndex = Question.getNewAiAskedQuestionIndex();
-        String aiQuestion = Question.getQuestionBank()[aiQuestionIndex]; // Gets the actual question string based on the question index.
-        JLabel aiQuestionText = new JLabel("\"" + aiQuestion + "\":");
-        aiQuestionText.setFont(new Font("Monospaced", Font.BOLD, 20));
-        aiQuestionText.setForeground(textColour);
+    private void userResponseButtonsSetup(boolean onlyOneCharacterLeft) {
+        if (onlyOneCharacterLeft) {
+            JLabel aiQuestionText = new JLabel("\"Is your character " + GameController.getAiCharacterList().get(0).getName() + "?\":");
+            aiQuestionText.setFont(new Font("Monospaced", Font.BOLD, 20));
+            aiQuestionText.setForeground(textColour);
 
-        JButton yesButton = new JButton("Yes");
-        yesButton.setFont(new Font("Monospaced", Font.BOLD, 15));
-        yesButton.setForeground(textColour);
-        yesButton.setBackground(buttonColour);
-        yesButton.setFocusPainted(false);
+            JButton yesButton = new JButton("Yes");
+            yesButton.setFont(new Font("Monospaced", Font.BOLD, 15));
+            yesButton.setForeground(textColour);
+            yesButton.setBackground(buttonColour);
+            yesButton.setFocusPainted(false);
 
-        JButton noButton = new JButton("No");
-        noButton.setFont(new Font("Monospaced", Font.BOLD, 15));
-        noButton.setForeground(textColour);
-        noButton.setBackground(buttonColour);
-        noButton.setFocusPainted(false);
+            JButton noButton = new JButton("No");
+            noButton.setFont(new Font("Monospaced", Font.BOLD, 15));
+            noButton.setForeground(textColour);
+            noButton.setBackground(buttonColour);
+            noButton.setFocusPainted(false);
 
-        // Action listener for the yes button.
-        yesButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                GameController.updateAiValidCharactersList(true, aiQuestionIndex);
+            // Action listener for the yes button.
+            yesButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    loseGame(1);
+                }
+            });
+
+            // Action listener for the no button.
+            noButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    loseGame(2);
+                }
+            });
+
+            buttonsPanel.add(aiQuestionText);
+            buttonsPanel.add(yesButton);
+            buttonsPanel.add(noButton);
+        } else {
+            if (Question.getAiAskedQuestions().size() == 18) {
+                loseGame(2);
+            } else {
+                int aiQuestionIndex = Question.getNewAiAskedQuestionIndex();
+                String aiQuestion = Question.getQuestionBank()[aiQuestionIndex]; // Gets the actual question string based on the question index.
+                JLabel aiQuestionText = new JLabel("\"" + aiQuestion + "\":");
+                aiQuestionText.setFont(new Font("Monospaced", Font.BOLD, 20));
+                aiQuestionText.setForeground(textColour);
+
+                JButton yesButton = new JButton("Yes");
+                yesButton.setFont(new Font("Monospaced", Font.BOLD, 15));
+                yesButton.setForeground(textColour);
+                yesButton.setBackground(buttonColour);
+                yesButton.setFocusPainted(false);
+
+                JButton noButton = new JButton("No");
+                noButton.setFont(new Font("Monospaced", Font.BOLD, 15));
+                noButton.setForeground(textColour);
+                noButton.setBackground(buttonColour);
+                noButton.setFocusPainted(false);
+
+                // Action listener for the yes button.
+                yesButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        GameController.updateAiValidCharactersList(true, aiQuestionIndex);
+
+                        GameController.setTurn(1);
+                        turnSetup();
+                    }
+                });
+
+                // Action listener for the no button.
+                noButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        GameController.updateAiValidCharactersList(false, aiQuestionIndex);
+
+                        GameController.setTurn(1);
+                        turnSetup();
+                    }
+                });
+
+                buttonsPanel.add(aiQuestionText);
+                buttonsPanel.add(yesButton);
+                buttonsPanel.add(noButton);
             }
-        });
+        }
+    }
 
-        // Action listener for the no button.
-        noButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                GameController.updateAiValidCharactersList(false, aiQuestionIndex);
-            }
-        });
+    /**
+     * This method displays how the user lost the game.
+     * @param option
+     */
+    private void loseGame(int option) {
+        if (option == 1) { // User loses, and AI wins.
+            JOptionPane.showMessageDialog(buttonsPanel, "You lose, the AI wins!");
 
-        buttonsPanel.add(aiQuestionText);
-        buttonsPanel.add(yesButton);
-        buttonsPanel.add(noButton);
+            boardPanel.removeAll();
+            buttonsPanel.removeAll();
+            buttonsPanel.add(playButton);
+
+            updatePanel(buttonsPanel);
+            updatePanel(boardPanel);
+        } else if (option == 2) {// User loses, and user lied.
+            JOptionPane.showMessageDialog(buttonsPanel, "You lose, you lied somewhere!");
+
+            boardPanel.removeAll();
+            buttonsPanel.removeAll();
+            buttonsPanel.add(playButton);
+
+            updatePanel(buttonsPanel);
+            updatePanel(boardPanel);
+        }
     }
 
     /**
