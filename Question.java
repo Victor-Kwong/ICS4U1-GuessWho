@@ -164,7 +164,7 @@ public class Question {
     public static int getNewAiAskedQuestionIndex() {
         int questionIndex = 0;
 
-        if (GameController.getDifficulty().equals("normal")) { // AI question choosing logic for normal mode.
+        if (GameController.getDifficulty().equals("Normal")) { // AI question choosing logic for normal mode.
             questionIndex = (int) (Math.random() * 19);
             while (aiAskedQuestions.contains(questionIndex)) { // AI question choosing logic for hard mode.
                 questionIndex = (int) (Math.random() * 19);
@@ -172,120 +172,103 @@ public class Question {
         } else {
            ArrayList<Person> remainingChars = GameController.getAiCharacterList();
         
-        // If only one character remains, signal to guess
-        if (remainingChars.size() == 1) {
-            return -1;
-        }
+            // If only one character remains, signal to guess
+            if (remainingChars.size() == 1) {
+                return -1;
+            }
 
-        double smallestDiff = Double.MAX_VALUE;
+            double smallestDiff = Double.MAX_VALUE;
 
-        // Check all unasked questions
-        for (int qIndex = 0; qIndex < questionBank.length; qIndex++) {
-            if (!aiAskedQuestions.contains(qIndex)) {
-                int yesCount = 0;
-                
-                // Count how many would answer "yes" to this question
-                for (Person character : remainingChars) {
-                    boolean matches = false;
-                    switch (qIndex) {
-                        case 0: 
-                        matches = character.isMale();
+            // Check all unasked questions
+            for (int qIndex = 0; qIndex < questionBank.length; qIndex++) {
+                if (!aiAskedQuestions.contains(qIndex)) {
+                    int yesCount = 0;
+                    
+                    // Count how many would answer "yes" to this question
+                    for (Person character : remainingChars) {
+                        boolean matches = false;
+                        switch (qIndex) {
+                            case 0: 
+                                matches = character.isMale();
+                                break;
+                            case 1: 
+                                matches = character.getEyeColour().equals("brown");
+                                break;
+                            case 2: 
+                                matches = character.getEyeColour().equals("green"); 
+                                break;
+                            case 3: 
+                                matches = character.getEyeColour().equals("blue"); 
+                                break;
+                            case 4: 
+                                matches = character.isLightSkin(); 
+                                break;
+                            case 5:
+                                matches = character.getHairColour().equals("black"); 
+                                break;
+                            case 6: 
+                                matches = character.getHairColour().equals("brown"); 
+                                break;
+                            case 7: 
+                                matches = character.getHairColour().equals("ginger"); 
+                                break;
+                            case 8: 
+                                matches = character.getHairColour().equals("blonde"); 
+                                break;
+                            case 9: 
+                                matches = character.getHairColour().equals("white"); 
+                                break;
+                            case 10:
+                                matches = character.hasFacialHair(); 
+                                break;
+                            case 11: 
+                                matches = character.hasGlasses(); 
+                                break;
+                            case 12: 
+                                matches = character.hasVisibleTeeth(); 
+                                break;
+                            case 13: 
+                                matches = character.hasHat(); 
+                                break;
+                            case 14: 
+                                matches = character.getHairType().equals("short"); 
+                                break;
+                            case 15: 
+                                matches = character.getHairType().equals("tied"); 
+                                break;
+                            case 16: 
+                                matches = character.getHairType().equals("long"); 
+                                break;
+                            case 17: 
+                                matches = character.getHairType().equals("bald"); 
+                                break;
+                            case 18:
+                                matches = character.hasEarPiercings(); 
+                                break;
+                        }
                         
-                        break;
-                        
-                        case 1: 
-                        matches = character.getEyeColour().equals("brown"); 
-                        break;
-                        
-                        case 2: 
-                        matches = character.getEyeColour().equals("green"); 
-                        break;
-                       
-                        case 3: 
-                        matches = character.getEyeColour().equals("blue"); 
-                        break;
-                       
-                        case 4: 
-                        matches = character.isLightSkin(); 
-                        break;
-                       
-                        case 5:
-                        matches = character.getHairColour().equals("black"); 
-                        break;
-                       
-                        case 6: 
-                        matches = character.getHairColour().equals("brown"); 
-                        break;
-                       
-                        case 7: 
-                        matches = character.getHairColour().equals("ginger"); 
-                        break;
-                       
-                        case 8: 
-                        matches = character.getHairColour().equals("blonde"); 
-                        break;
-                       
-                        case 9: 
-                        matches = character.getHairColour().equals("white"); 
-                        break;
-                       
-                        case 10:
-                        matches = character.hasFacialHair(); 
-                        break;
-                       
-                        case 11: 
-                        matches = character.hasGlasses(); 
-                        break;
-                       
-                        case 12: 
-                        matches = character.hasVisibleTeeth(); 
-                        break;
-                       
-                        case 13: 
-                        matches = character.hasHat(); 
-                        break;
-                       
-                        case 14: 
-                        matches = character.getHairType().equals("short"); 
-                        break;
-                       
-                        case 15: 
-                        matches = character.getHairType().equals("tied"); 
-                        break;
-                       
-                        case 16: 
-                        matches = character.getHairType().equals("long"); 
-                        break;
-                       
-                        case 17: 
-                        matches = character.getHairType().equals("bald"); 
-                        break;
-                       
-                        case 18:
-                        matches = character.hasEarPiercings(); 
-                        break;
+                        if (matches){
+                            yesCount++;
+                        }
+        
                     }
-                    if (matches){
-                        yesCount++;
+
+                    // Calculate how close to 50/50 this split is
+                    double ratio = (double) yesCount / remainingChars.size();
+                    double diff = Math.abs(ratio - 0.5);
+
+                    // Track best question
+                    if (diff < smallestDiff) {
+                        smallestDiff = diff;
+                        questionIndex = qIndex;
                     }
-    
-                }
-
-                // Calculate how close to 50/50 this split is
-                double ratio = (double) yesCount / remainingChars.size();
-                double diff = Math.abs(ratio - 0.5);
-
-                // Track best question
-                if (diff < smallestDiff) {
-                    smallestDiff = diff;
-                    questionIndex = qIndex;
                 }
             }
+
+            aiAskedQuestions.add(questionIndex);
+
         }
 
-        aiAskedQuestions.add(questionIndex);
-
-        }
         return questionIndex;
     }
 

@@ -18,7 +18,7 @@ public class GameController {
 
     static Person[][] player1Board; // Player 1 will ALWAYS be an actual user, and NEVER an AI!
 
-    private static String difficulty = "normal"; // Normal or Hard.
+    private static String difficulty = "Normal"; // Normal or Hard.
 
     private static int turnTracker; // 1 = Player 1's turn, 2 = Player 2's turn.
 

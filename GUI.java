@@ -183,7 +183,7 @@ class GUI extends JFrame implements ActionListener {
 
                 break;
             case "Normal Difficulty":
-                GameController.setDifficulty("normal");
+                GameController.setDifficulty("Normal");
 
                 buttonsPanel.removeAll();
 
@@ -200,7 +200,7 @@ class GUI extends JFrame implements ActionListener {
 
                 break;
             case "Hard Difficulty":
-                GameController.setDifficulty("hard");
+                GameController.setDifficulty("Hard");
 
                 buttonsPanel.removeAll();
 
@@ -407,15 +407,17 @@ class GUI extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(buttonsPanel, "You Guessed: " + selectedOption + "\nThe AI Says: " + Question.validateUserGuess(guessDropDown.getSelectedItem().toString()));
 
                 if (Question.validateUserGuess(guessDropDown.getSelectedItem().toString()).equals("Yes, you win!")) {
-                    GameController.recordGameResult("[" + GameController.getDateTime() + "] " + "You guessed \"" + selectedOption + "\" and won!");
+                    GameController.recordGameResult("[" + GameController.getDateTime() + "] {" + GameController.getDifficulty() + " Difficulty} (Timer: " + GameController.getTimerMode() + ")  →  " + "You guessed \"" + selectedOption + "\" and won!");
                 } else {
-                    GameController.recordGameResult("[" + GameController.getDateTime() + "] " + "You guessed \"" + selectedOption + "\" and lost.");
+                    GameController.recordGameResult("[" + GameController.getDateTime() + "] {" + GameController.getDifficulty() + " Difficulty} (Timer: " + GameController.getTimerMode() + ")  →  " + "You guessed \"" + selectedOption + "\" and lost.");
                 }
 
                 boardPanel.removeAll();
                 buttonsPanel.removeAll();
                 timerPanel.removeAll();
-                timer.stop();
+                try {
+                    timer.stop();
+                } catch (Exception err) {}
 
                 updatePanel(mainPanel);
 
@@ -526,12 +528,14 @@ class GUI extends JFrame implements ActionListener {
         if (option == 1) { // User loses, and AI wins.
             JOptionPane.showMessageDialog(buttonsPanel, "You lose, the AI wins!");
 
-            GameController.recordGameResult("[" + GameController.getDateTime() + "] " + "The AI guessed your character correctly, and you lost!");
+            GameController.recordGameResult("[" + GameController.getDateTime() + "] {" + GameController.getDifficulty() + " Difficulty} (Timer: " + GameController.getTimerMode() + ")  →  " + "The AI guessed your character correctly, and you lost!");
 
             boardPanel.removeAll();
             buttonsPanel.removeAll();
             timerPanel.removeAll();
-            timer.stop();
+            try {
+                timer.stop();
+            } catch (Exception err) {}
 
             addButton(playButton);
             addButton(viewHistoryButton);
@@ -542,12 +546,14 @@ class GUI extends JFrame implements ActionListener {
         } else if (option == 2) { // User loses, and user lied.
             JOptionPane.showMessageDialog(buttonsPanel, "You lose, you lied somewhere!");
 
-            GameController.recordGameResult("[" + GameController.getDateTime() + "] " + "The AI didn't guess your character, but you lied!");
+            GameController.recordGameResult("[" + GameController.getDateTime() + "] {" + GameController.getDifficulty() + " Difficulty} (Timer: " + GameController.getTimerMode() + ")  →  " + "The AI didn't guess your character, but you lied!");
 
             boardPanel.removeAll();
             buttonsPanel.removeAll();
             timerPanel.removeAll();
-            timer.stop();
+            try {
+                timer.stop();
+            } catch (Exception err) {}
 
             addButton(playButton);
             addButton(viewHistoryButton);
@@ -558,12 +564,14 @@ class GUI extends JFrame implements ActionListener {
         } else if (option == 3) { // Timer ran out, no one won.
             JOptionPane.showMessageDialog(buttonsPanel, "The timer ran out, no one won!");
 
-            GameController.recordGameResult("[" + GameController.getDateTime() + "] " + "The timer ran out, no one won!");
+            GameController.recordGameResult("[" + GameController.getDateTime() + "] {" + GameController.getDifficulty() + " Difficulty} (Timer: " + GameController.getTimerMode() + ")  →  " + "The timer ran out, no one won!");
 
             boardPanel.removeAll();
             buttonsPanel.removeAll();
             timerPanel.removeAll();
-            timer.stop();
+            try {
+                timer.stop();
+            } catch (Exception err) {}
 
             addButton(playButton);
             addButton(viewHistoryButton);
