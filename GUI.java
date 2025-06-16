@@ -1,4 +1,3 @@
-// -=-  Imports  -=-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -9,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-
+import javax.swing.Timer;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -34,6 +33,7 @@ class GUI extends JFrame implements ActionListener {
     // -=-  Component Initializations  -=-
     static private JPanel mainPanel = new JPanel();
     static private JPanel boardPanel = new JPanel();
+    static private JPanel timerPanel = new JPanel();
 
     static private JLabel title = new JLabel("Guess Who?");
     static private JLabel authors = new JLabel("By: Moxin Guo, Victor Kwong, & Victoria Wong");
@@ -45,6 +45,7 @@ class GUI extends JFrame implements ActionListener {
 
     static private JButton viewHistoryButton;
     static private JButton toggleMusicButton;
+    static private JButton toggleTimerModerButton;
 
 
     // -=-  GuiFrame Constructor  -=-
@@ -83,6 +84,18 @@ class GUI extends JFrame implements ActionListener {
         buttonsPanel.setMaximumSize(new Dimension(1200, 60));
         mainPanel.add(buttonsPanel);
 
+        // Padding between button and timer panel.
+        mainPanel.add(Box.createVerticalStrut(5));
+
+        // Timer panel (horizontal axis)
+        timerPanel.setLayout(new FlowLayout());
+        timerPanel.setBackground(backgroundColour);
+        timerPanel.setMaximumSize(new Dimension(300, 30));
+        mainPanel.add(timerPanel);
+
+        // Padding below timer panel
+        mainPanel.add(Box.createVerticalStrut(15));
+
         // "Play" Button
         playButton = createButton(buttonsPanel, "Play");
 
@@ -92,8 +105,9 @@ class GUI extends JFrame implements ActionListener {
         // "Toggle Music" Button
         toggleMusicButton = createButton(buttonsPanel, "Toggle Music");
 
-        // Padding between buttons panel and board panel.
-        mainPanel.add(Box.createVerticalStrut(30));
+        // "Toggle Timer Mode" Button
+        toggleTimerModerButton = createButton(buttonsPanel, "Toggle Timer Mode: " + GameController.getTimerMode());
+        toggleTimerModerButton.setActionCommand("Toggle Timer Mode");
 
         // Adding the board visual panel to the main panel.
         boardPanel.setBackground(backgroundColour);
@@ -132,12 +146,19 @@ class GUI extends JFrame implements ActionListener {
                 GameController.toggleMusic();
 
                 break;
+            case "Toggle Timer Mode":
+                GameController.toggleTimerMode();
+                toggleTimerModerButton.setText("Toggle Timer Mode: " + GameController.getTimerMode());
+                updatePanel(buttonsPanel);
+
+                break;
             case "Main Menu": // Code that executes when the "Main Menu" button is pressed.
                 buttonsPanel.removeAll();
 
                 addButton(playButton);
                 addButton(viewHistoryButton);
                 addButton(toggleMusicButton);
+                addButton(toggleTimerModerButton);
                 
                 updatePanel(buttonsPanel);
 
@@ -172,8 +193,9 @@ class GUI extends JFrame implements ActionListener {
                     GameController.newGame();
                 } catch (Exception e) {}
                 GameController.chooseRandomFirstTurn();
-                turnSetup();
 
+                timerSetup();
+                turnSetup();
                 boardSetup();
 
                 break;
@@ -188,8 +210,9 @@ class GUI extends JFrame implements ActionListener {
                     GameController.newGame();
                 } catch (Exception e) {}
                 GameController.chooseRandomFirstTurn();
-                turnSetup();
 
+                timerSetup();
+                turnSetup();
                 boardSetup();
 
                 break;
@@ -246,6 +269,40 @@ class GUI extends JFrame implements ActionListener {
     private void updatePanel(JPanel panel) {
         panel.revalidate();
         panel.repaint();
+    }
+
+    private static Timer timer; // Timer variable
+    /**
+     * This method sets up the timer.
+     */
+    private void timerSetup() {
+        JLabel timerLabel = new JLabel();
+        timerLabel.setFont(new Font("Monospaced", Font.BOLD, 20));
+        timerLabel.setForeground(textColour);
+
+        if (GameController.getTimerMode().equals("On")) {
+            timerLabel.setText("Timer: " + GameController.timer + " second(s) left");
+
+            timer = new Timer(1000, new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    GameController.timer--;
+
+                    if (GameController.timer >= 0) {
+                        timerLabel.setText("Timer: " + GameController.timer + " second(s) left");
+                    } else {
+                        timer.stop();
+                        timerLabel.setText("Timer ran out, game over!");
+                        loseGame(3);
+                    }
+                }
+            });
+
+            timer.start();
+        } else {
+            timerLabel.setText("Timer: DISABLED");
+        }
+
+        timerPanel.add(timerLabel);
     }
 
     /**
@@ -357,12 +414,15 @@ class GUI extends JFrame implements ActionListener {
 
                 boardPanel.removeAll();
                 buttonsPanel.removeAll();
+                timerPanel.removeAll();
+                timer.stop();
 
                 updatePanel(mainPanel);
 
                 addButton(playButton);
                 addButton(viewHistoryButton);
                 addButton(toggleMusicButton);
+                addButton(toggleTimerModerButton);
             }
         });
 
@@ -470,25 +530,47 @@ class GUI extends JFrame implements ActionListener {
 
             boardPanel.removeAll();
             buttonsPanel.removeAll();
+            timerPanel.removeAll();
+            timer.stop();
+
             addButton(playButton);
             addButton(viewHistoryButton);
             addButton(toggleMusicButton);
+            addButton(toggleTimerModerButton);
 
-            updatePanel(buttonsPanel);
-            updatePanel(boardPanel);
-        } else if (option == 2) {// User loses, and user lied.
+            updatePanel(mainPanel);
+        } else if (option == 2) { // User loses, and user lied.
             JOptionPane.showMessageDialog(buttonsPanel, "You lose, you lied somewhere!");
 
             GameController.recordGameResult("[" + GameController.getDateTime() + "] " + "The AI didn't guess your character, but you lied!");
 
             boardPanel.removeAll();
             buttonsPanel.removeAll();
+            timerPanel.removeAll();
+            timer.stop();
+
             addButton(playButton);
             addButton(viewHistoryButton);
             addButton(toggleMusicButton);
+            addButton(toggleTimerModerButton);
 
-            updatePanel(buttonsPanel);
-            updatePanel(boardPanel);
+            updatePanel(mainPanel);
+        } else if (option == 3) { // Timer ran out, no one won.
+            JOptionPane.showMessageDialog(buttonsPanel, "The timer ran out, no one won!");
+
+            GameController.recordGameResult("[" + GameController.getDateTime() + "] " + "The timer ran out, no one won!");
+
+            boardPanel.removeAll();
+            buttonsPanel.removeAll();
+            timerPanel.removeAll();
+            timer.stop();
+
+            addButton(playButton);
+            addButton(viewHistoryButton);
+            addButton(toggleMusicButton);
+            addButton(toggleTimerModerButton);
+
+            updatePanel(mainPanel);
         }
     }
 

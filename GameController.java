@@ -161,6 +161,8 @@ public class GameController {
             Question.getQuestionResponses().clear();
             Question.getAiAskedQuestions().clear();
         }
+
+        timer = defaultTimer;
     }
   
     public static void updateAiValidCharactersList(boolean response, int questionIndex) {
@@ -548,5 +550,29 @@ public class GameController {
         }
 
         playingMusic = !playingMusic;
+    }
+
+    // Timer Mode Variables
+    private static boolean timerMode = false;
+    private static final int defaultTimer = 3; // 180 seconds -> 3 minutes
+    static int timer;
+
+    /**
+     * This method returns "On" or "Off" based on whether the timer mode is enabled or disabled.
+     * @return
+     */
+    public static String getTimerMode() {
+        if (timerMode) {
+            return "On";
+        } else {
+            return "Off";
+        }
+    }
+
+    /**
+     * This method toggles the timer mode variable.
+     */
+    public static void toggleTimerMode() {
+        timerMode = !timerMode;
     }
 }
