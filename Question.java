@@ -281,7 +281,7 @@ public class Question {
         if (character.equals(GameController.getAiCharacter().getName())) {
             return "Yes, you win!";
         } else {
-            return "No, you lost!";
+            return "No, you lost, and the AI chose \"" + GameController.getAiCharacter().getName() + "\"!";
         }
     }
 }

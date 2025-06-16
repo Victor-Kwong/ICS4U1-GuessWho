@@ -526,7 +526,7 @@ class GUI extends JFrame implements ActionListener {
      */
     private void loseGame(int option) {
         if (option == 1) { // User loses, and AI wins.
-            JOptionPane.showMessageDialog(buttonsPanel, "You lose, the AI wins!");
+            JOptionPane.showMessageDialog(buttonsPanel, "You lose, the AI chose \"" + GameController.getAiCharacter().getName() + "\" and won!");
 
             GameController.recordGameResult("[" + GameController.getDateTime() + "] {" + GameController.getDifficulty() + " Difficulty} (Timer: " + GameController.getTimerMode() + ")  →  " + "The AI guessed your character correctly, and you lost!");
 
@@ -544,7 +544,7 @@ class GUI extends JFrame implements ActionListener {
 
             updatePanel(mainPanel);
         } else if (option == 2) { // User loses, and user lied.
-            JOptionPane.showMessageDialog(buttonsPanel, "You lose, you lied somewhere!");
+            JOptionPane.showMessageDialog(buttonsPanel, "You lose, you lied somewhere, and the AI chose \"" + GameController.getAiCharacter().getName() + "\"!");
 
             GameController.recordGameResult("[" + GameController.getDateTime() + "] {" + GameController.getDifficulty() + " Difficulty} (Timer: " + GameController.getTimerMode() + ")  →  " + "The AI didn't guess your character, but you lied!");
 
@@ -562,7 +562,7 @@ class GUI extends JFrame implements ActionListener {
 
             updatePanel(mainPanel);
         } else if (option == 3) { // Timer ran out, no one won.
-            JOptionPane.showMessageDialog(buttonsPanel, "The timer ran out, no one won!");
+            JOptionPane.showMessageDialog(buttonsPanel, "The timer ran out, no one won, and the air chose \"" + GameController.getAiCharacter().getName() + "\"!");
 
             GameController.recordGameResult("[" + GameController.getDateTime() + "] {" + GameController.getDifficulty() + " Difficulty} (Timer: " + GameController.getTimerMode() + ")  →  " + "The timer ran out, no one won!");
 
